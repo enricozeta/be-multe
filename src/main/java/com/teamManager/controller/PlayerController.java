@@ -28,7 +28,7 @@ public class PlayerController {
 	@Autowired
 	private PlayerService playerService = new PlayerService();
 
-	@RequestMapping(value = { "player" }, method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = { "admin/player" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint add(@RequestBody Player player) {
 		try {
 			playerRepository.save(playerService.add(player));
@@ -39,7 +39,7 @@ public class PlayerController {
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = { "player" }, method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = { "admin/player" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint update(@RequestBody Player player) {
 		try {
 			playerRepository.save(playerService.update(player));
@@ -60,7 +60,7 @@ public class PlayerController {
 		return playerService.getAllPlayer();
 	}
 
-	@RequestMapping(value = { "player" }, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = { "admin/player" }, method = RequestMethod.DELETE, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint delete(@NonNull @RequestParam Long id) {
 		try {
 			playerRepository.delete(playerService.getPlayerById(id));

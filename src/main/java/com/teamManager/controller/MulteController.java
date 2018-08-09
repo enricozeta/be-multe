@@ -26,13 +26,13 @@ public class MulteController {
 	@Autowired
 	private MulteService multeService = new MulteService();
 
-	@RequestMapping(value = { "multa" }, method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody Multa multa) throws Exception {
 		multaRepository.save(multeService.addUpdate(multa));
 		return true;
 	}
 
-	@RequestMapping(value = { "multa" }, method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody Boolean update(@RequestBody Multa multa) throws Exception {
 		multaRepository.save(multeService.addUpdate(multa));
 		return true;
@@ -48,7 +48,7 @@ public class MulteController {
 		return multeService.getAllOfTeam();
 	}
 
-	@RequestMapping(value = { "multa" }, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.DELETE, consumes = "application/json")
 	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) {
 		multaRepository.deleteById(id);
 		return true;

@@ -8,4 +8,5 @@ import com.teamManager.model.User;
 public interface IUserRepository extends CrudRepository<User, Long> {
 
 	public User findByEmail(@NonNull String email);
+
 }
