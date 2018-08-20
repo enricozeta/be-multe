@@ -5,8 +5,18 @@ import org.springframework.lang.NonNull;
 
 import com.teamManager.model.User;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface IUserRepository.
+ */
 public interface IUserRepository extends CrudRepository<User, Long> {
 
+	/**
+	 * Find by email.
+	 *
+	 * @param email the email
+	 * @return the user
+	 */
 	public User findByEmail(@NonNull String email);
 
 }

@@ -16,6 +16,9 @@ import com.teamManager.repository.ITeamRepository;
 import com.teamManager.service.TeamService;
 import com.teamManager.service.UserService;
 
+/**
+ * The Class TeamController.
+ */
 @Controller
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class TeamController {
@@ -29,23 +32,55 @@ public class TeamController {
 	@Autowired
 	private TeamService teamService = new TeamService();
 
+	/**
+	 * Adds the.
+	 *
+	 * @param team
+	 *            the team
+	 * @return the boolean
+	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody Team team) {
 		teamRepository.save(team);
 		return true;
 	}
 
+	/**
+	 * Update.
+	 *
+	 * @param team
+	 *            the team
+	 * @return the boolean
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody Boolean update(@RequestBody Team team) throws Exception {
 		teamRepository.save(teamService.checkTeam(team));
 		return true;
 	}
 
+	/**
+	 * Gets the.
+	 *
+	 * @return the team
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody Team get() throws Exception {
 		return teamService.getCurrentTeam();
 	}
 
+	/**
+	 * Gets the.
+	 *
+	 * @param user
+	 *            the user
+	 * @return the user
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = "admin/createStaffUser", method = RequestMethod.POST)
 	public @ResponseBody User get(@Valid User user) throws Exception {
 		return userService.createStaffUser(user);

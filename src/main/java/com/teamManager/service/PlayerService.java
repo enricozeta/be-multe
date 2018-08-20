@@ -19,6 +19,9 @@ import com.teamManager.model.Player;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 
+/**
+ * The Class PlayerService.
+ */
 @Service("playerService")
 public class PlayerService {
 
@@ -28,11 +31,25 @@ public class PlayerService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * Adds the.
+	 *
+	 * @param player the player
+	 * @return the player
+	 * @throws Exception the exception
+	 */
 	public Player add(Player player) throws Exception {
 		player.setTeam(teamService.getCurrentTeam());
 		return player;
 	}
 
+	/**
+	 * Update.
+	 *
+	 * @param player the player
+	 * @return the player
+	 * @throws Exception the exception
+	 */
 	public Player update(Player player) throws Exception {
 		if (!player.getTeam().equals(teamService.getCurrentTeam())) {
 			throw new Exception("This player isn't in your team");
@@ -40,6 +57,13 @@ public class PlayerService {
 		return player;
 	}
 
+	/**
+	 * Gets the player by id.
+	 *
+	 * @param id the id
+	 * @return the player by id
+	 * @throws Exception the exception
+	 */
 	public Player getPlayerById(Long id) throws Exception {
 		Team team = teamService.getCurrentTeam();
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -62,6 +86,12 @@ public class PlayerService {
 		return resultList.get(0);
 	}
 
+	/**
+	 * Gets the all player.
+	 *
+	 * @return the all player
+	 * @throws Exception the exception
+	 */
 	public List<Player> getAllPlayer() throws Exception {
 		return teamService.getCurrentTeam().getPlayers();
 	}

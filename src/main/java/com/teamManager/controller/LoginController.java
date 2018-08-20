@@ -15,6 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.teamManager.model.User;
 import com.teamManager.service.UserService;
 
+/**
+ * The Class LoginController.
+ */
 @Controller
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class LoginController {
@@ -22,6 +25,11 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * Login.
+	 *
+	 * @return the model and view
+	 */
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView login() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -29,6 +37,11 @@ public class LoginController {
 		return modelAndView;
 	}
 
+	/**
+	 * Registration.
+	 *
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public ModelAndView registration() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -38,6 +51,15 @@ public class LoginController {
 		return modelAndView;
 	}
 
+	/**
+	 * Creates the new user.
+	 *
+	 * @param user
+	 *            the user
+	 * @param bindingResult
+	 *            the binding result
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -58,6 +80,11 @@ public class LoginController {
 		return modelAndView;
 	}
 
+	/**
+	 * Home.
+	 *
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView home() {
 		ModelAndView modelAndView = new ModelAndView();

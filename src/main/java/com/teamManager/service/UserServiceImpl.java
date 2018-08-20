@@ -12,6 +12,9 @@ import com.teamManager.model.User;
 import com.teamManager.repository.IRoleRepository;
 import com.teamManager.repository.IUserRepository;
 
+/**
+ * The Class UserServiceImpl.
+ */
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
@@ -24,11 +27,23 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private IRoleRepository roleRepository;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.teamManager.service.UserService#findUserByEmail(java.lang.String)
+	 */
 	@Override
 	public User findUserByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.teamManager.service.UserService#saveUser(com.teamManager.model.User)
+	 */
 	@Override
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -38,6 +53,13 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.teamManager.service.UserService#createStaffUser(com.teamManager.model
+	 * .User)
+	 */
 	@Override
 	public User createStaffUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

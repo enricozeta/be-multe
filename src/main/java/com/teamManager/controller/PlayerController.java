@@ -18,6 +18,9 @@ import com.teamManager.model.Player;
 import com.teamManager.repository.IPlayerRepository;
 import com.teamManager.service.PlayerService;
 
+/**
+ * The Class PlayerController.
+ */
 @Controller
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class PlayerController {
@@ -28,6 +31,13 @@ public class PlayerController {
 	@Autowired
 	private PlayerService playerService = new PlayerService();
 
+	/**
+	 * Adds the.
+	 *
+	 * @param player
+	 *            the player
+	 * @return the http status entry point
+	 */
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint add(@RequestBody Player player) {
 		try {
@@ -39,6 +49,13 @@ public class PlayerController {
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
 	}
 
+	/**
+	 * Update.
+	 *
+	 * @param player
+	 *            the player
+	 * @return the http status entry point
+	 */
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint update(@RequestBody Player player) {
 		try {
@@ -50,16 +67,39 @@ public class PlayerController {
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
 	}
 
+	/**
+	 * Gets the.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the player
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = { "player" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody Player get(@NonNull @RequestParam Long id) throws Exception {
 		return playerService.getPlayerById(id);
 	}
 
+	/**
+	 * Gets the all.
+	 *
+	 * @return the all
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = { "player/all" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody List<Player> getAll() throws Exception {
 		return playerService.getAllPlayer();
 	}
 
+	/**
+	 * Delete.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the http status entry point
+	 */
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.DELETE, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint delete(@NonNull @RequestParam Long id) {
 		try {

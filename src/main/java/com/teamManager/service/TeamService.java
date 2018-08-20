@@ -11,6 +11,9 @@ import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
 import com.teamManager.repository.IUserRepository;
 
+/**
+ * The Class TeamService.
+ */
 @Service("teamService")
 public class TeamService {
 
@@ -23,6 +26,12 @@ public class TeamService {
 	@Autowired
 	private IUserRepository userRepository;
 
+	/**
+	 * Gets the current team.
+	 *
+	 * @return the current team
+	 * @throws Exception the exception
+	 */
 	public Team getCurrentTeam() throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
@@ -34,6 +43,13 @@ public class TeamService {
 		return team;
 	}
 
+	/**
+	 * Check team.
+	 *
+	 * @param team the team
+	 * @return the team
+	 * @throws Exception the exception
+	 */
 	public Team checkTeam(@NonNull Team team) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
