@@ -38,7 +38,7 @@ public class MulteService {
 	 */
 	public Multa addUpdate(@NonNull Multa multa) throws Exception {
 		if (multa.getPlayer() != null && playerService.getPlayerById(multa.getPlayer().getId()) != null) {
-			return multa;
+			return multaRepository.save(multa);
 		} else {
 			throw new Exception("This multa is invalid");
 		}

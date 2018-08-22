@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +68,23 @@ public class UserServiceImpl implements UserService {
 		Role staffRole = roleRepository.findByRole("STAFF");
 		user.setRoles(new HashSet<Role>(Arrays.asList(staffRole)));
 		return userRepository.save(user);
+	}
+
+	@Override
+	public boolean changePassword(@NonNull User user, @NonNull String oldPassword, @NonNull String newPassword)
+			throws Exception {
+		try {
+			if (bCryptPasswordEncoder.matches(user.getPassword(), oldPassword)) {
+				user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+				userRepository.save(user);
+				return true;
+			} else {
+				throw new Exception("Password update incomplete");
+			}
+		} catch (Exception e) {
+			throw new Exception("Password update incomplete");
+		}
+
 	}
 
 }
