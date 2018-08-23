@@ -2,6 +2,8 @@ package com.teamManager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.teamManager.dto.UserDTO;
 import com.teamManager.model.User;
+import com.teamManager.repository.IUserRepository;
 import com.teamManager.service.UserService;
 
 /**
@@ -21,6 +25,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private IUserRepository userRepository;
 
 	/**
 	 * Update.
@@ -39,5 +46,28 @@ public class UserController {
 	public @ResponseBody Boolean changePassword(@RequestBody User user, @NonNull String oldPassword,
 			@NonNull String newPassword) throws Exception {
 		return userService.changePassword(user, oldPassword, newPassword);
+	}
+
+	@RequestMapping(value = { "user" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody UserDTO get() throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		if (email != null) {
+			User user = userRepository.findByEmail(email);
+			if (user != null) {
+				UserDTO userDTO = new UserDTO();
+				String fullName = user.getName() != null ? user.getName() : "";
+				fullName = fullName + (user.getLastName() != null ? (" " + user.getLastName()) : "");
+				userDTO.setFullName(fullName);
+				userDTO.setEmail(user.getEmail());
+				userDTO.setRoles(user.getRoles());
+
+				return userDTO;
+			} else {
+				throw new Exception("User logged not found");
+			}
+		} else {
+			throw new Exception("User logged not found");
+		}
 	}
 }
