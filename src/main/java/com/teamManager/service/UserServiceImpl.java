@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.teamManager.model.Role;
+import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.IRoleRepository;
 import com.teamManager.repository.IUserRepository;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private IUserRepository userRepository;
+
+	@Autowired
+	private TeamService teamService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -62,12 +66,24 @@ public class UserServiceImpl implements UserService {
 	 * .User)
 	 */
 	@Override
-	public User createStaffUser(User user) {
+	public User createStaffUser(User user) throws Exception {
+
+		// set user's fields
+		Team currentTeam = teamService.getCurrentTeam();
+		String name = currentTeam.getName();
+		user.setEmail(name);
+		user.setName(name);
+		user.setTeam(currentTeam);
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setActive(1);
+
 		Role staffRole = roleRepository.findByRole("STAFF");
-		user.setRoles(new HashSet<Role>(Arrays.asList(staffRole)));
-		return userRepository.save(user);
+		if (staffRole != null) {
+			user.setRoles(new HashSet<Role>(Arrays.asList(staffRole)));
+			return userRepository.save(user);
+		} else {
+			throw new Exception("The staff role not found");
+		}
 	}
 
 	@Override
@@ -85,6 +101,11 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("Password update incomplete");
 		}
 
+	}
+
+	@Override
+	public boolean checkStaffUser(Team team) {
+		return userRepository.findByEmail(team.getName()) != null;
 	}
 
 }

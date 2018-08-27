@@ -2,6 +2,7 @@ package com.teamManager.service;
 
 import org.springframework.lang.NonNull;
 
+import com.teamManager.model.Team;
 import com.teamManager.model.User;
 
 /**
@@ -32,8 +33,19 @@ public interface UserService {
 	 * @param user
 	 *            the user
 	 * @return the user
+	 * @throws Exception
+	 *             the exception
 	 */
-	public User createStaffUser(User user);
+	public User createStaffUser(User user) throws Exception;
+
+	/**
+	 * Check staff user.
+	 *
+	 * @param team
+	 *            the team
+	 * @return true, if successful
+	 */
+	public boolean checkStaffUser(Team team);
 
 	/**
 	 * Change password.
@@ -46,6 +58,7 @@ public interface UserService {
 	 *            the new password
 	 * @return true, if successful
 	 * @throws Exception
+	 *             the exception
 	 */
 	public boolean changePassword(@NonNull User user, @NonNull String oldPassword, @NonNull String newPassword)
 			throws Exception;
