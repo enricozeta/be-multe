@@ -17,6 +17,8 @@ public class MulteType {
 
 	private String descrizione;
 
+	private double valore;
+
 	/**
 	 * Gets the id.
 	 *
@@ -53,6 +55,25 @@ public class MulteType {
 	 */
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+	}
+
+	/**
+	 * Gets the valore.
+	 *
+	 * @return the valore
+	 */
+	public double getValore() {
+		return valore;
+	}
+
+	/**
+	 * Sets the valore.
+	 *
+	 * @param valore
+	 *            the new valore
+	 */
+	public void setValore(double valore) {
+		this.valore = valore;
 	}
 
 }
