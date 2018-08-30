@@ -42,6 +42,10 @@ public class Team {
 	@JsonBackReference
 	private User user;
 
+	@OneToMany(mappedBy = "multeType", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<MulteType> multeTypes;
+
 	/**
 	 * Gets the id.
 	 *
@@ -133,6 +137,64 @@ public class Team {
 		for (Player player : this.players) {
 			this.NoPaid = this.getNoPaid() + player.getMulteNonPagate();
 		}
+	}
+
+	/**
+	 * Gets the user.
+	 *
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * Sets the user.
+	 *
+	 * @param user
+	 *            the new user
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	/**
+	 * Gets the multe types.
+	 *
+	 * @return the multe types
+	 */
+	public List<MulteType> getMulteTypes() {
+		return multeTypes;
+	}
+
+	/**
+	 * Sets the multe types.
+	 *
+	 * @param multeTypes
+	 *            the new multe types
+	 */
+	public void setMulteTypes(List<MulteType> multeTypes) {
+		this.multeTypes = multeTypes;
+	}
+
+	/**
+	 * Sets the paid.
+	 *
+	 * @param paid
+	 *            the new paid
+	 */
+	public void setPaid(double paid) {
+		this.paid = paid;
+	}
+
+	/**
+	 * Sets the no paid.
+	 *
+	 * @param noPaid
+	 *            the new no paid
+	 */
+	public void setNoPaid(double noPaid) {
+		NoPaid = noPaid;
 	}
 
 }

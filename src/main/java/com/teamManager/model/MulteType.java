@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * The Class MulteType.
@@ -18,6 +22,30 @@ public class MulteType {
 	private String descrizione;
 
 	private double valore;
+
+	@ManyToOne
+	@JoinColumn(name = "team_id")
+	@JsonBackReference
+	private Team team;
+
+	/**
+	 * Gets the team.
+	 *
+	 * @return the team
+	 */
+	public Team getTeam() {
+		return team;
+	}
+
+	/**
+	 * Sets the team.
+	 *
+	 * @param team
+	 *            the new team
+	 */
+	public void setTeam(Team team) {
+		this.team = team;
+	}
 
 	/**
 	 * Gets the id.

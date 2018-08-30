@@ -3,6 +3,8 @@ package com.teamManager.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
+import com.teamManager.repository.IUserRepository;
 import com.teamManager.service.TeamService;
 import com.teamManager.service.UserService;
 
@@ -30,6 +33,9 @@ public class TeamController {
 	private UserService userService;
 
 	@Autowired
+	private IUserRepository userRepository;
+
+	@Autowired
 	private TeamService teamService = new TeamService();
 
 	/**
@@ -41,6 +47,10 @@ public class TeamController {
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody Team team) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		User user = userRepository.findByEmail(email);
+		team.setUser(user);
 		teamRepository.save(team);
 		return true;
 	}
@@ -84,6 +94,20 @@ public class TeamController {
 	@RequestMapping(value = "admin/createStaffUser", method = RequestMethod.POST)
 	public @ResponseBody User get(@Valid User user) throws Exception {
 		return userService.createStaffUser(user);
+	}
+
+	/**
+	 * Gets the.
+	 * 
+	 * @return
+	 *
+	 * @return the team
+	 * @throws Exception
+	 *             the exception
+	 */
+	@RequestMapping(value = { "admin/team" }, method = RequestMethod.DELETE, produces = { "application/json" })
+	public @ResponseBody void delete() throws Exception {
+		teamRepository.delete(teamService.getCurrentTeam());
 	}
 
 }
