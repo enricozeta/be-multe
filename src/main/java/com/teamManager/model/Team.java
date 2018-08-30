@@ -42,7 +42,7 @@ public class Team {
 	@JsonBackReference
 	private User user;
 
-	@OneToMany(mappedBy = "multeType", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<MulteType> multeTypes;
 
