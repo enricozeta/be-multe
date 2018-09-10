@@ -1,8 +1,13 @@
 package com.teamManager.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -26,6 +31,9 @@ public class MulteService {
 
 	@Autowired
 	private IMultaRepository multaRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	/**
 	 * Adds the update.
@@ -96,6 +104,40 @@ public class MulteService {
 		} else {
 			throw new Exception("This multa isn't in your team");
 		}
+	}
+
+	/**
+	 * Gets the multe with filter.
+	 *
+	 * @param player
+	 *            the player
+	 * @param oneMonthAgo
+	 *            the one month ago
+	 * @param today
+	 *            the today
+	 * @return the multe with filter
+	 */
+	public List<Multa> getMulteWithFilter(Player player, Date oneMonthAgo, Date today) {
+		Query query = entityManager.createQuery("FROM Multa as m WHERE m.player = ? AND m.data <= ? AND m.data >= ?");
+		query.setParameter(0, player);
+		query.setParameter(1, today);
+		query.setParameter(2, oneMonthAgo);
+		return query.getResultList();
+	}
+
+	/**
+	 * Gets the total.
+	 *
+	 * @param multe
+	 *            the multe
+	 * @return the total
+	 */
+	public double getTotal(List<Multa> multe) {
+		double result = 0;
+		for (Multa multa : multe) {
+			result += multa.getValore();
+		}
+		return result;
 	}
 
 }
