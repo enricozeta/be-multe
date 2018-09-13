@@ -45,8 +45,16 @@ public class MulteService {
 	 *             the exception
 	 */
 	public Multa addUpdate(@NonNull Multa multa) throws Exception {
-		if (multa.getPlayer() != null && playerService.getPlayerById(multa.getPlayer().getId()) != null) {
-			return multaRepository.save(multa);
+		Player player = playerService.getPlayerById(multa.getPlayer().getId());
+		if (multa.getPlayer() != null && player != null) {
+			Multa result = multaRepository.save(multa);
+			if (result.isPagata()) {
+				player.setMultePagate(player.getMultePagate() + result.getValore());
+			} else {
+				player.setMulteNonPagate(player.getMulteNonPagate() + result.getValore());
+			}
+			playerService.update(player);
+			return result;
 		} else {
 			throw new Exception("This multa is invalid");
 		}
@@ -98,8 +106,16 @@ public class MulteService {
 	 */
 	public boolean delete(@NonNull Long id) throws Exception {
 		Optional<Multa> multa = multaRepository.findById(id);
-		if (multa.get().getPlayer() != null && playerService.getPlayerById(multa.get().getPlayer().getId()) != null) {
-			multaRepository.deleteById(id);
+		Player player = playerService.getPlayerById(multa.get().getPlayer().getId());
+		if (multa.isPresent() && player != null) {
+			Multa result = multa.get();
+			if (result.isPagata()) {
+				player.setMultePagate(player.getMultePagate() - result.getValore());
+			} else {
+				player.setMulteNonPagate(player.getMulteNonPagate() - result.getValore());
+			}
+			playerService.update(player);
+			multaRepository.deleteById(result.getId());
 			return true;
 		} else {
 			throw new Exception("This multa isn't in your team");

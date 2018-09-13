@@ -1,6 +1,6 @@
 package com.teamManager.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -119,7 +119,12 @@ public class TeamController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "team/worst" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Set<PlayerHome> getWorst() throws Exception {
+	public @ResponseBody List<PlayerHome> getWorst() throws Exception {
 		return teamService.getWorst();
+	}
+
+	@RequestMapping(value = { "team/best" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody List<PlayerHome> getBest() throws Exception {
+		return teamService.getBest();
 	}
 }

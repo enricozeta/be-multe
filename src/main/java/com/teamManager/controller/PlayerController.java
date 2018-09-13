@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamManager.model.Player;
-import com.teamManager.repository.IPlayerRepository;
 import com.teamManager.service.PlayerService;
 
 /**
@@ -24,9 +23,6 @@ import com.teamManager.service.PlayerService;
 @Controller
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class PlayerController {
-
-	@Autowired
-	private IPlayerRepository playerRepository;
 
 	@Autowired
 	private PlayerService playerService = new PlayerService();
@@ -41,10 +37,10 @@ public class PlayerController {
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint add(@RequestBody Player player) {
 		try {
-			playerRepository.save(playerService.add(player));
+			playerService.add(player);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
+			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
 	}
@@ -59,10 +55,10 @@ public class PlayerController {
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint update(@RequestBody Player player) {
 		try {
-			playerRepository.save(playerService.update(player));
+			playerService.add(player);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
+			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
 	}
@@ -103,7 +99,7 @@ public class PlayerController {
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.DELETE, consumes = "application/json")
 	public @ResponseBody HttpStatusEntryPoint delete(@NonNull @RequestParam Long id) {
 		try {
-			playerRepository.delete(playerService.getPlayerById(id));
+			playerService.delete(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);

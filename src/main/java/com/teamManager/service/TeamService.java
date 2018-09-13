@@ -1,15 +1,13 @@
 package com.teamManager.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -90,8 +88,50 @@ public class TeamService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Set<PlayerHome> getWorst() throws Exception {
-		Set<PlayerHome> worstPlayer = new HashSet<>();
+	public List<PlayerHome> getWorst() throws Exception {
+		List<PlayerHome> worstPlayer = new ArrayList<>();
+		Map<Player, Double> result = getPlayerForHome();
+		for (Player player : result.keySet()) {
+			worstPlayer.add(new PlayerHome(player.getId(), player.getName(), player.getSurname(), result.get(player)));
+		}
+		Collections.sort(worstPlayer, new Comparator<PlayerHome>() {
+			@Override
+			public int compare(PlayerHome p1, PlayerHome p2) {
+				return -(p1.getTotal().compareTo(p2.getTotal()));
+			}
+		});
+		if (worstPlayer.size() > 5) {
+			return worstPlayer.subList(0, 5);
+		}
+		return worstPlayer;
+	}
+
+	/**
+	 * Gets the best.
+	 *
+	 * @return the worst
+	 * @throws Exception
+	 *             the exception
+	 */
+	public List<PlayerHome> getBest() throws Exception {
+		List<PlayerHome> bestPlayers = new ArrayList<>();
+		Map<Player, Double> result = getPlayerForHome();
+		for (Player player : result.keySet()) {
+			bestPlayers.add(new PlayerHome(player.getId(), player.getName(), player.getSurname(), result.get(player)));
+		}
+		Collections.sort(bestPlayers, new Comparator<PlayerHome>() {
+			@Override
+			public int compare(PlayerHome p1, PlayerHome p2) {
+				return p1.getTotal().compareTo(p2.getTotal());
+			}
+		});
+		if (bestPlayers.size() > 5) {
+			return bestPlayers.subList(0, 5);
+		}
+		return bestPlayers;
+	}
+
+	private Map<Player, Double> getPlayerForHome() throws Exception {
 		Map<Player, Double> result = new HashMap<>();
 		Team team = this.getCurrentTeam();
 		List<Player> players = team.getPlayers();
@@ -103,14 +143,8 @@ public class TeamService {
 			double total = multeService.getTotal(multeService.getMulteWithFilter(player, oneMonthAgo, today));
 			result.put(player, total);
 		}
-		Map<Player, Double> collect = result.entrySet().stream()
-				.sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).limit(10)
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-		;
-		for (Player player : collect.keySet()) {
-			worstPlayer.add(new PlayerHome(player.getId(), player.getName(), player.getSurname(), result.get(player)));
-		}
-		return worstPlayer;
+		return result;
+
 	}
 
 }

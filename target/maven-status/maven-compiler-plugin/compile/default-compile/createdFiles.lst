@@ -1,3 +1,4 @@
+com/teamManager/dto/PlayerHome.class
 com/teamManager/repository/IRoleRepository.class
 com/teamManager/controller/MulteTypeController.class
 com/teamManager/controller/TeamController.class
@@ -6,6 +7,7 @@ com/teamManager/dto/UserDTO.class
 com/teamManager/model/Player.class
 com/teamManager/repository/IMultaRepository.class
 com/teamManager/Application.class
+com/teamManager/service/TeamService$2.class
 com/teamManager/service/UserService.class
 com/teamManager/App.class
 com/teamManager/configuration/SecurityConfiguration.class
@@ -14,6 +16,7 @@ com/teamManager/repository/IMulteTypeRepository.class
 com/teamManager/service/MulteService.class
 com/teamManager/model/Multa.class
 com/teamManager/service/TeamService.class
+com/teamManager/service/TeamService$1.class
 com/teamManager/configuration/WebMvcConfig.class
 com/teamManager/service/UserServiceImpl.class
 com/teamManager/controller/UserController.class

@@ -11,7 +11,7 @@ public class PlayerHome {
 
 	private String surname;
 
-	private double total;
+	private Double total;
 
 	/**
 	 * Instantiates a new player home.
@@ -94,7 +94,7 @@ public class PlayerHome {
 	 *
 	 * @return the total
 	 */
-	public double getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
@@ -104,7 +104,7 @@ public class PlayerHome {
 	 * @param total
 	 *            the new total
 	 */
-	public void setTotal(double total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
