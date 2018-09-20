@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface UserService.
  */

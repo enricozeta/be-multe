@@ -36,6 +36,8 @@ public class MulteService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	private static final String MULTA_ERROR = "This multa isn't in your team";
+
 	/**
 	 * Adds the update.
 	 *
@@ -89,11 +91,15 @@ public class MulteService {
 	public MultaDTO getById(@NonNull Long id) throws Exception {
 		try {
 			Optional<Multa> multa = multaRepository.findById(id);
+			if (!multa.isPresent()) {
+				throw new Exception(MULTA_ERROR);
+			}
 			playerService.getPlayerById(multa.get().getPlayer().getId());
 			Multa result = multa.get();
-			return new MultaDTO(result.getId(), result.getDescrizione(), result.getValore(), result.getData(), result.isPagata(), result.getPlayer(), result.getMulteType());
+			return new MultaDTO(result.getId(), result.getDescrizione(), result.getValore(), result.getData(),
+					result.isPagata(), result.getPlayer(), result.getMulteType());
 		} catch (Exception e) {
-			throw new Exception("This multa isn't in your team");
+			throw new Exception(MULTA_ERROR);
 		}
 	}
 
@@ -108,8 +114,11 @@ public class MulteService {
 	 */
 	public boolean delete(@NonNull Long id) throws Exception {
 		Optional<Multa> multa = multaRepository.findById(id);
+		if (!multa.isPresent()) {
+			throw new Exception(MULTA_ERROR);
+		}
 		Player player = playerService.getPlayerById(multa.get().getPlayer().getId());
-		if (multa.isPresent() && player != null) {
+		if (player != null) {
 			Multa result = multa.get();
 			if (result.isPagata()) {
 				player.setMultePagate(player.getMultePagate() - result.getValore());
@@ -120,7 +129,7 @@ public class MulteService {
 			multaRepository.deleteById(result.getId());
 			return true;
 		} else {
-			throw new Exception("This multa isn't in your team");
+			throw new Exception(MULTA_ERROR);
 		}
 	}
 
@@ -135,6 +144,7 @@ public class MulteService {
 	 *            the today
 	 * @return the multe with filter
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Multa> getMulteWithFilter(Player player, Date oneMonthAgo, Date today) {
 		Query query = entityManager.createQuery("FROM Multa as m WHERE m.player = ? AND m.data <= ? AND m.data >= ?");
 		query.setParameter(0, player);
