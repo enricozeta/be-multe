@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.teamManager.model.Player;
-import com.teamManager.model.Team;
 import com.teamManager.repository.IPlayerRepository;
 
 /**
@@ -68,15 +67,10 @@ public class PlayerService {
 	public Player getPlayerById(Long id) throws Exception {
 		Optional<Player> findById = playerRepository.findById(id);
 		if (findById.isPresent()) {
-			Team team = teamService.getCurrentTeam();
-			List<Player> players = team.getPlayers();
-			if (players.contains(findById.get())) {
-				return findById.get();
-			} else {
-				throw new Exception("This player isn't in your team or not exist");
-			}
+			teamService.checkTeam(findById.get().getTeam());
+			return findById.get();
 		} else {
-			return null;
+			throw new Exception("This player isn't in your team or not exist");
 		}
 	}
 

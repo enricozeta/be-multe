@@ -90,10 +90,10 @@ public class MulteController {
 	 * @param id
 	 *            the id
 	 * @return the boolean
+	 * @throws Exception
 	 */
 	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.DELETE, consumes = "application/json")
-	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) {
-		multaRepository.deleteById(id);
-		return true;
+	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) throws Exception {
+		return multeService.delete(id);
 	}
 }

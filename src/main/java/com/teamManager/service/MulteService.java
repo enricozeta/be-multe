@@ -49,7 +49,7 @@ public class MulteService {
 	 */
 	public Multa addUpdate(@NonNull Multa multa) throws Exception {
 		Player player = playerService.getPlayerById(multa.getPlayer().getId());
-		if (multa.getPlayer() != null && player != null) {
+		if (player != null) {
 			Multa result = multaRepository.save(multa);
 			if (result.isPagata()) {
 				player.setMultePagate(player.getMultePagate() + result.getValore());

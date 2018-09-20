@@ -39,7 +39,6 @@ public class PlayerController {
 		try {
 			playerService.add(player);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
@@ -57,7 +56,6 @@ public class PlayerController {
 		try {
 			playerService.add(player);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new HttpStatusEntryPoint(HttpStatus.CREATED);
@@ -101,7 +99,6 @@ public class PlayerController {
 		try {
 			playerService.delete(id);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
 		}
 		return new HttpStatusEntryPoint(HttpStatus.ACCEPTED);
