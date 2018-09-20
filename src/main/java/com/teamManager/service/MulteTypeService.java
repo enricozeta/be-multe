@@ -3,6 +3,7 @@ package com.teamManager.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.teamManager.model.MulteType;
 import com.teamManager.repository.IMulteTypeRepository;
@@ -10,6 +11,7 @@ import com.teamManager.repository.IMulteTypeRepository;
 /**
  * The Class MulteTypeService.
  */
+@Service("multeTypeService")
 public class MulteTypeService {
 
 	@Autowired
