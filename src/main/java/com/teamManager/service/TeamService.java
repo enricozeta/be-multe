@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.teamManager.dto.PlayerHome;
@@ -40,6 +39,9 @@ public class TeamService {
 	@Autowired
 	private IUserRepository userRepository;
 
+	@Value("${test}")
+	private String test;
+
 	/**
 	 * Gets the current team.
 	 *
@@ -48,8 +50,7 @@ public class TeamService {
 	 *             the exception
 	 */
 	public Team getCurrentTeam() throws Exception {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+		String email = userService.getAuthentication().getName();
 		User user = userRepository.findByEmail(email);
 		Team team = teamRepository.findByUser(user);
 		if (team == null) {
@@ -70,8 +71,7 @@ public class TeamService {
 	 *             the exception
 	 */
 	public Team checkTeam(@NonNull Team team) throws Exception {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+		String email = userService.getAuthentication().getName();
 		User findUserByEmail = userService.findUserByEmail(email);
 		Long teamId = findUserByEmail.getTeam().getId();
 		if (team.getId().equals(teamId)) {

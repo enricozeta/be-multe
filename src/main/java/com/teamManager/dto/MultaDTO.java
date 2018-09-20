@@ -1,24 +1,15 @@
-package com.teamManager.model;
+package com.teamManager.dto;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.teamManager.model.MulteType;
+import com.teamManager.model.Player;
 
 /**
- * The Class Multa.
+ * The Class MultaDTO.
  */
-@Entity
-public class Multa {
+public class MultaDTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String descrizione;
@@ -29,14 +20,8 @@ public class Multa {
 
 	private boolean pagata;
 
-	@ManyToOne()
-	@JoinColumn(name = "player_id")
-	@JsonBackReference
 	private Player player;
 
-	@ManyToOne()
-	@JoinColumn(name = "multetype_id")
-	@JsonBackReference
 	private MulteType multeType;
 
 	/**
@@ -170,6 +155,62 @@ public class Multa {
 	 */
 	public void setMulteType(MulteType multeType) {
 		this.multeType = multeType;
+	}
+
+	/**
+	 * Instantiates a new multa DTO.
+	 *
+	 * @param id
+	 *            the id
+	 * @param descrizione
+	 *            the descrizione
+	 * @param valore
+	 *            the valore
+	 * @param data
+	 *            the data
+	 * @param pagata
+	 *            the pagata
+	 * @param player
+	 *            the player
+	 * @param multeType
+	 *            the multe type
+	 */
+	public MultaDTO(Long id, String descrizione, double valore, Date data, boolean pagata, Player player,
+			MulteType multeType) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.valore = valore;
+		this.data = data;
+		this.pagata = pagata;
+		this.player = player;
+		this.multeType = multeType;
+	}
+
+	/**
+	 * Instantiates a new multa DTO.
+	 *
+	 * @param id
+	 *            the id
+	 * @param descrizione
+	 *            the descrizione
+	 * @param valore
+	 *            the valore
+	 * @param data
+	 *            the data
+	 * @param pagata
+	 *            the pagata
+	 * @param player
+	 *            the player
+	 */
+	public MultaDTO(Long id, String descrizione, double valore, Date data, boolean pagata, Player player) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.valore = valore;
+		this.data = data;
+		this.pagata = pagata;
+		this.player = player;
 	}
 
 }

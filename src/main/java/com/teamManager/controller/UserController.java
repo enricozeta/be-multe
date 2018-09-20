@@ -2,8 +2,6 @@ package com.teamManager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,8 +48,7 @@ public class UserController {
 
 	@RequestMapping(value = { "user" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody UserDTO get() throws Exception {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+		String email = userService.getAuthentication().getName();
 		if (email != null) {
 			User user = userRepository.findByEmail(email);
 			if (user != null) {
@@ -61,7 +58,10 @@ public class UserController {
 				userDTO.setFullName(fullName);
 				userDTO.setEmail(user.getEmail());
 				userDTO.setRoles(user.getRoles());
-
+				userDTO.setName(user.getName());
+				userDTO.setSurname(user.getLastName());
+				userDTO.setTeam(user.getTeam().getName());
+				
 				return userDTO;
 			} else {
 				throw new Exception("User logged not found");

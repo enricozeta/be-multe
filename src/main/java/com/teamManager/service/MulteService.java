@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.dto.MultaDTO;
 import com.teamManager.model.Multa;
 import com.teamManager.model.Player;
 import com.teamManager.repository.IMultaRepository;
@@ -85,11 +86,12 @@ public class MulteService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Optional<Multa> getById(@NonNull Long id) throws Exception {
+	public MultaDTO getById(@NonNull Long id) throws Exception {
 		try {
 			Optional<Multa> multa = multaRepository.findById(id);
 			playerService.getPlayerById(multa.get().getPlayer().getId());
-			return multa;
+			Multa result = multa.get();
+			return new MultaDTO(result.getId(), result.getDescrizione(), result.getValore(), result.getData(), result.isPagata(), result.getPlayer(), result.getMulteType());
 		} catch (Exception e) {
 			throw new Exception("This multa isn't in your team");
 		}

@@ -1,7 +1,5 @@
 package com.teamManager.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.teamManager.dto.MultaDTO;
 import com.teamManager.model.Multa;
 import com.teamManager.repository.IMultaRepository;
 import com.teamManager.service.MulteService;
@@ -69,7 +68,7 @@ public class MulteController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "multa" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Optional<Multa> get(@NonNull @RequestParam Long id) throws Exception {
+	public @ResponseBody MultaDTO get(@NonNull @RequestParam Long id) throws Exception {
 		return multeService.getById(id);
 	}
 

@@ -2,6 +2,7 @@ package com.teamManager.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -73,25 +74,18 @@ public class PlayerService {
 	 *             the exception
 	 */
 	public Player getPlayerById(Long id) throws Exception {
-		Team team = teamService.getCurrentTeam();
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Player> createQuery = criteriaBuilder.createQuery(Player.class);
-		final Root<Player> root = createQuery.from(Player.class);
-
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(root.<Long>get("id"), team.getId()));
-		Join<Team, User> chairJoin = root.join("user_id", JoinType.INNER);
-		predicates.add(chairJoin.get("id").in(id));
-
-		createQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
-
-		List<Player> resultList = entityManager.createQuery(createQuery).getResultList();
-
-		if (resultList.isEmpty()) {
-			throw new Exception("This player isn't in your team or not exist");
+		Optional<Player> findById = playerRepository.findById(id);
+		if (findById.isPresent()) {
+			Team team = teamService.getCurrentTeam();
+			List<Player> players = team.getPlayers();
+			if (players.contains(findById.get())) {
+				return findById.get();
+			} else {
+				throw new Exception("This player isn't in your team or not exist");
+			}
+		} else {
+			return null;
 		}
-
-		return resultList.get(0);
 	}
 
 	/**

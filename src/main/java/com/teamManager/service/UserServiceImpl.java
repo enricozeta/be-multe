@@ -4,7 +4,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +36,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private IRoleRepository roleRepository;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Value("${test}")
+	private String test;
 
 	/*
 	 * (non-Javadoc)
@@ -106,6 +117,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean checkStaffUser(Team team) {
 		return userRepository.findByEmail(team.getName()) != null;
+	}
+
+	@Override
+	public Authentication getAuthentication() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ("true".equals(test) && authentication.getPrincipal().toString().equals("anonymousUser")) {
+			UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken("nicola@nicola.it",
+					"nicola");
+			authentication = authenticationManager.authenticate(authReq);
+		}
+		return authentication;
 	}
 
 }

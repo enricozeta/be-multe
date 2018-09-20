@@ -1,6 +1,7 @@
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/controller/PlayerController.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/Application.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/configuration/WebMvcConfig.java
+/Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/dto/MultaDTO.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/controller/TeamController.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/controller/LoginController.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/service/MulteService.java

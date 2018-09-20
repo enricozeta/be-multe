@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamManager.model.MulteType;
+import com.teamManager.model.Team;
 import com.teamManager.repository.IMulteTypeRepository;
 import com.teamManager.service.TeamService;
 
@@ -62,25 +63,24 @@ public class MulteTypeController {
 		return true;
 	}
 
-	// /**
-	// * Gets the.
-	// *
-	// * @param id
-	// * the id
-	// * @return the optional
-	// * @throws Exception
-	// * the exception
-	// */
-	// @RequestMapping(value = { "multaType" }, method = RequestMethod.GET,
-	// produces = { "application/json" })
-	// public @ResponseBody Optional<MulteType> get(@NonNull @RequestParam Long
-	// id) throws Exception {
-	// Optional<MulteType> findById = multeTypeRepository.findById(id);
-	// if(findById != null){
-	// Team checkTeam = teamService.checkTeam(findById.get().getTeam());
-	// }
-	// return multeTypeRepository.findById(id);
-	// }
+	/**
+	 * Gets the.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the optional
+	 * @throws Exception
+	 *             the exception
+	 */
+	@RequestMapping(value = { "multaType" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody Optional<MulteType> get(@NonNull @RequestParam Long id) throws Exception {
+		Optional<MulteType> findById = multeTypeRepository.findById(id);
+		if (findById != null) {
+			teamService.checkTeam(findById.get().getTeam());
+			return findById;
+		}
+		return null;
+	}
 
 	/**
 	 * Gets the all.

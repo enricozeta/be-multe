@@ -5,8 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,8 +48,7 @@ public class TeamController {
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody Team team) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+		String email = userService.getAuthentication().getName();
 		User user = userRepository.findByEmail(email);
 		team.setUser(user);
 		teamRepository.save(team);

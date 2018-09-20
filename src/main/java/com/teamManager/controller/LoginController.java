@@ -3,8 +3,6 @@ package com.teamManager.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -80,20 +78,4 @@ public class LoginController {
 		return modelAndView;
 	}
 
-	/**
-	 * Home.
-	 *
-	 * @return the model and view
-	 */
-	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
-	public ModelAndView home() {
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("userName",
-				"Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-		modelAndView.setViewName("admin/home");
-		return modelAndView;
-	}
 }

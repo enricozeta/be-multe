@@ -31,7 +31,7 @@ public class Player {
 
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<Multa> multe = new ArrayList<Multa>();
+	private List<Multa> multe = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn(name = "team_id")
