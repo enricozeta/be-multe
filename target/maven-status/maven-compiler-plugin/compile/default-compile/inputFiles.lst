@@ -25,6 +25,7 @@
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/configuration/SecurityConfiguration.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/model/Team.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/model/User.java
+/Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/configuration/MailSenderConfig.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/repository/ITeamRepository.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/model/Role.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/controller/MulteController.java

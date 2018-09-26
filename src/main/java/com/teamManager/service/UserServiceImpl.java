@@ -6,6 +6,8 @@ import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.configuration.MailSenderConfig;
 import com.teamManager.model.Role;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
@@ -30,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private TeamService teamService;
+
+	@Autowired
+	private MailSenderConfig mailSenderConfig;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -98,20 +104,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean changePassword(@NonNull User user, @NonNull String oldPassword, @NonNull String newPassword)
-			throws Exception {
+	public boolean changePassword(@NonNull String email, @NonNull String oldPassword, @NonNull String newPassword,
+			Boolean forgot) throws Exception {
 		try {
-			if (bCryptPasswordEncoder.matches(user.getPassword(), oldPassword)) {
-				user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-				userRepository.save(user);
-				return true;
+			User user = this.findUserByEmail(email);
+			if (forgot) {
+				user.setPassword(bCryptPasswordEncoder.encode("nicola"));
+				JavaMailSender javaMailSender = mailSenderConfig.getJavaMailSender();
+				SimpleMailMessage message = new SimpleMailMessage();
+				message.setTo(email);
+				message.setFrom("enrico_04@hotmail.it");
+				message.setSubject("Reset Password");
+				message.setText("La tua nuova password è temp1234567temp. Ricordati di m");
+				javaMailSender.send(message);
 			} else {
-				throw new Exception("Password update incomplete");
+				if (this.getAuthentication().getName().equals(email)) {
+					if (bCryptPasswordEncoder.matches(user.getPassword(), oldPassword)) {
+						user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+					} else {
+						throw new Exception("Password update incomplete");
+					}
+				} else {
+					throw new Exception("Forbidden");
+				}
 			}
+			userRepository.save(user);
+			return true;
 		} catch (Exception e) {
-			throw new Exception("Password update incomplete");
+			throw new Exception("Password update incomplete." + e.getMessage());
 		}
-
 	}
 
 	@Override

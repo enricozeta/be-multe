@@ -51,18 +51,20 @@ public interface UserService {
 	/**
 	 * Change password.
 	 *
-	 * @param user
-	 *            the user
+	 * @param email
+	 *            the email
 	 * @param oldPassword
 	 *            the old password
 	 * @param newPassword
 	 *            the new password
+	 * @param forgot
+	 *            the forgot
 	 * @return true, if successful
 	 * @throws Exception
 	 *             the exception
 	 */
-	public boolean changePassword(@NonNull User user, @NonNull String oldPassword, @NonNull String newPassword)
-			throws Exception;
+	public boolean changePassword(@NonNull String email, @NonNull String oldPassword, @NonNull String newPassword,
+			Boolean forgot) throws Exception;
 
 	/**
 	 * Gets the authentication.
