@@ -37,6 +37,9 @@ public class PlayerService {
 	 *             the exception
 	 */
 	public Player add(Player player) throws Exception {
+		if (player.getTeam() == null) {
+			throw new Exception("This player isn't have a team");
+		}
 		teamService.checkTeam(player.getTeam());
 		return playerRepository.save(player);
 	}
@@ -51,6 +54,9 @@ public class PlayerService {
 	 *             the exception
 	 */
 	public Player update(Player player) throws Exception {
+		if (player.getTeam() == null) {
+			throw new Exception("This player isn't have a team");
+		}
 		teamService.checkTeam(player.getTeam());
 		return playerRepository.save(player);
 	}
@@ -67,6 +73,9 @@ public class PlayerService {
 	public Player getPlayerById(Long id) throws Exception {
 		Optional<Player> findById = playerRepository.findById(id);
 		if (findById.isPresent()) {
+			if (findById.get().getTeam() == null) {
+				throw new Exception("This player isn't have a team");
+			}
 			teamService.checkTeam(findById.get().getTeam());
 			return findById.get();
 		} else {

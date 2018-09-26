@@ -30,6 +30,9 @@ public class MulteTypeService {
 	 *             the exception
 	 */
 	public MulteType add(MulteType multaType) throws Exception {
+		if (multaType.getTeam() == null) {
+			throw new Exception("This multa isn't have a team");
+		}
 		teamService.checkTeam(multaType.getTeam());
 		return multeTypeRepository.save(multaType);
 	}
@@ -46,6 +49,9 @@ public class MulteTypeService {
 	public MulteType get(Long id) throws Exception {
 		Optional<MulteType> findById = multeTypeRepository.findById(id);
 		if (findById.isPresent()) {
+			if (findById.get().getTeam() == null) {
+				throw new Exception("This multa isn't have a team");
+			}
 			teamService.checkTeam(findById.get().getTeam());
 			return findById.get();
 		} else {

@@ -20,6 +20,7 @@
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/model/MulteType.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/service/TeamService.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/controller/MulteTypeController.java
+/Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/service/MulteTypeService.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/repository/IUserRepository.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/configuration/SecurityConfiguration.java
 /Users/ezamberlan/Documents/Projects/Multe_Manager/teamManager/src/main/java/com/teamManager/model/Team.java
