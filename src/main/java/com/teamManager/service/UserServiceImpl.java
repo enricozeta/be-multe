@@ -108,15 +108,14 @@ public class UserServiceImpl implements UserService {
 			Boolean forgot) throws Exception {
 		try {
 			User user = this.findUserByEmail(email);
+			JavaMailSender javaMailSender = mailSenderConfig.getJavaMailSender();
+			SimpleMailMessage message = new SimpleMailMessage();
 			if (forgot) {
 				user.setPassword(bCryptPasswordEncoder.encode("nicola"));
-				JavaMailSender javaMailSender = mailSenderConfig.getJavaMailSender();
-				SimpleMailMessage message = new SimpleMailMessage();
 				message.setTo(email);
 				message.setFrom("enrico_04@hotmail.it");
 				message.setSubject("Reset Password");
-				message.setText("La tua nuova password è temp1234567temp. Ricordati di m");
-				javaMailSender.send(message);
+				message.setText("La tua nuova password è temp1234567temp. Ricordati di modificarla");
 			} else {
 				if (this.getAuthentication().getName().equals(email)) {
 					if (bCryptPasswordEncoder.matches(user.getPassword(), oldPassword)) {
@@ -129,6 +128,9 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 			userRepository.save(user);
+			if (forgot) {
+				javaMailSender.send(message);
+			}
 			return true;
 		} catch (Exception e) {
 			throw new Exception("Password update incomplete." + e.getMessage());
