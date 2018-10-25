@@ -120,8 +120,26 @@ public class TeamController {
 		return teamService.getWorst();
 	}
 
+	/**
+	 * Gets the best.
+	 *
+	 * @return the best
+	 * @throws Exception
+	 *             the exception
+	 */
 	@RequestMapping(value = { "team/best" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody List<PlayerHome> getBest() throws Exception {
 		return teamService.getBest();
+	}
+
+	/**
+	 * Reset total.
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@RequestMapping(value = { "admin/team/resetTotal" }, method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody void resetTotal() throws Exception {
+		teamService.resetTotal();
 	}
 }

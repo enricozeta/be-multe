@@ -131,6 +131,22 @@ public class TeamService {
 		return bestPlayers;
 	}
 
+	/**
+	 * Reset total.
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void resetTotal() throws Exception {
+		Team currentTeam = getCurrentTeam();
+		List<Player> players = currentTeam.getPlayers();
+		double total = 0;
+		for (Player player : players) {
+			total += player.getMultePagate();
+		}
+		currentTeam.setPaid(total);
+	}
+
 	private Map<Player, Double> getPlayerForHome() throws Exception {
 		Map<Player, Double> result = new HashMap<>();
 		Team team = this.getCurrentTeam();

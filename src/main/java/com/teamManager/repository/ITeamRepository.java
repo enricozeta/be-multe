@@ -6,7 +6,6 @@ import org.springframework.lang.NonNull;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ITeamRepository.
  */
