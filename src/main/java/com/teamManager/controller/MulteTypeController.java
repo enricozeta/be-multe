@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.teamManager.model.MulteType;
+import com.teamManager.dto.MultaTypeDTO;
 import com.teamManager.service.MulteTypeService;
 
 /**
@@ -33,7 +33,7 @@ public class MulteTypeController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/multaType" }, method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody MulteType add(@RequestBody MulteType multaType) throws Exception {
+	public @ResponseBody MultaTypeDTO add(@RequestBody MultaTypeDTO multaType) throws Exception {
 		return multeTypeService.add(multaType);
 	}
 
@@ -47,7 +47,7 @@ public class MulteTypeController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/multaType" }, method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody MulteType update(@RequestBody MulteType multaType) throws Exception {
+	public @ResponseBody MultaTypeDTO update(@RequestBody MultaTypeDTO multaType) throws Exception {
 		return multeTypeService.add(multaType);
 	}
 
@@ -61,7 +61,7 @@ public class MulteTypeController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "multaType" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody MulteType get(@NonNull @RequestParam Long id) throws Exception {
+	public @ResponseBody MultaTypeDTO get(@NonNull @RequestParam Long id) throws Exception {
 		return multeTypeService.get(id);
 	}
 
@@ -73,7 +73,7 @@ public class MulteTypeController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "multaType/all" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Iterable<MulteType> getAll() throws Exception {
+	public @ResponseBody Iterable<MultaTypeDTO> getAll() throws Exception {
 		return multeTypeService.getAll();
 	}
 
@@ -85,7 +85,7 @@ public class MulteTypeController {
 	 * @return the boolean
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "admin/multaType" }, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = { "admin/multaType" }, method = RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) throws Exception {
 		return multeTypeService.delete(id);
 	}

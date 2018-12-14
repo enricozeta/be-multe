@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.teamManager.model.Player;
+import com.teamManager.dto.PlayerDTO;
 import com.teamManager.service.PlayerService;
 
 /**
@@ -25,7 +25,7 @@ import com.teamManager.service.PlayerService;
 public class PlayerController {
 
 	@Autowired
-	private PlayerService playerService = new PlayerService();
+	private PlayerService playerService;
 
 	/**
 	 * Adds the.
@@ -33,15 +33,11 @@ public class PlayerController {
 	 * @param player
 	 *            the player
 	 * @return the http status entry point
+	 * @throws Exception
 	 */
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody HttpStatusEntryPoint add(@RequestBody Player player) {
-		try {
-			playerService.add(player);
-		} catch (Exception e) {
-			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new HttpStatusEntryPoint(HttpStatus.CREATED);
+	public @ResponseBody PlayerDTO add(@RequestBody PlayerDTO player) throws Exception {
+		return playerService.save(player);
 	}
 
 	/**
@@ -50,15 +46,11 @@ public class PlayerController {
 	 * @param player
 	 *            the player
 	 * @return the http status entry point
+	 * @throws Exception
 	 */
 	@RequestMapping(value = { "admin/player" }, method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody HttpStatusEntryPoint update(@RequestBody Player player) {
-		try {
-			playerService.add(player);
-		} catch (Exception e) {
-			return new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new HttpStatusEntryPoint(HttpStatus.CREATED);
+	public @ResponseBody PlayerDTO update(@RequestBody PlayerDTO player) throws Exception {
+		return playerService.save(player);
 	}
 
 	/**
@@ -71,7 +63,7 @@ public class PlayerController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "player" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Player get(@NonNull @RequestParam Long id) throws Exception {
+	public @ResponseBody PlayerDTO get(@NonNull @RequestParam Long id) throws Exception {
 		return playerService.getPlayerById(id);
 	}
 
@@ -83,7 +75,7 @@ public class PlayerController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "player/all" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody List<Player> getAll() throws Exception {
+	public @ResponseBody List<PlayerDTO> getAll() throws Exception {
 		return playerService.getAllPlayer();
 	}
 
@@ -94,13 +86,13 @@ public class PlayerController {
 	 *            the id
 	 * @return the http status entry point
 	 */
-	@RequestMapping(value = { "admin/player" }, method = RequestMethod.DELETE, consumes = "application/json")
-	public @ResponseBody HttpStatusEntryPoint delete(@NonNull @RequestParam Long id) {
+	@RequestMapping(value = { "admin/player" }, method = RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) {
 		try {
 			playerService.delete(id);
 		} catch (Exception e) {
-			return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
+			return false;
 		}
-		return new HttpStatusEntryPoint(HttpStatus.ACCEPTED);
+		return true;
 	}
 }

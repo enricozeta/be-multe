@@ -38,10 +38,6 @@ public class Player {
 	@JsonBackReference
 	private Team team;
 
-	private double multeNonPagate;
-
-	private double multePagate;
-
 	/**
 	 * Gets the id.
 	 *
@@ -135,44 +131,6 @@ public class Player {
 	 */
 	public void setTeam(Team team) {
 		this.team = team;
-	}
-
-	/**
-	 * Gets the multe non pagate.
-	 *
-	 * @return the multe non pagate
-	 */
-	public double getMulteNonPagate() {
-		return multeNonPagate;
-	}
-
-	/**
-	 * Sets the multe non pagate.
-	 *
-	 * @param multeNonPagate
-	 *            the new multe non pagate
-	 */
-	public void setMulteNonPagate(double multeNonPagate) {
-		this.multeNonPagate = multeNonPagate;
-	}
-
-	/**
-	 * Gets the multe pagate.
-	 *
-	 * @return the multe pagate
-	 */
-	public double getMultePagate() {
-		return multePagate;
-	}
-
-	/**
-	 * Sets the multe pagate.
-	 *
-	 * @param multePagate
-	 *            the new multe pagate
-	 */
-	public void setMultePagate(double multePagate) {
-		this.multePagate = multePagate;
 	}
 
 }

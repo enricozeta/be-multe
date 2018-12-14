@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.adapter.MulteTypeAdapter;
+import com.teamManager.dto.MultaTypeDTO;
 import com.teamManager.model.MulteType;
 import com.teamManager.repository.IMulteTypeRepository;
 
@@ -18,6 +20,9 @@ public class MulteTypeService {
 	private IMulteTypeRepository multeTypeRepository;
 
 	@Autowired
+	private MulteTypeAdapter multaTypeAdapter;
+
+	@Autowired
 	private TeamService teamService;
 
 	/**
@@ -29,12 +34,13 @@ public class MulteTypeService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public MulteType add(MulteType multaType) throws Exception {
-		if (multaType.getTeam() == null) {
+	public MultaTypeDTO add(MultaTypeDTO multaType) throws Exception {
+		if (multaType.getTeamId() == null) {
 			throw new Exception("This multa isn't have a team");
 		}
-		teamService.checkTeam(multaType.getTeam());
-		return multeTypeRepository.save(multaType);
+		teamService.checkTeam(multaType.getTeamId());
+		MulteType save = multeTypeRepository.save(multaTypeAdapter.getAdapter(multaType, MulteType.class));
+		return multaTypeAdapter.getAdapter(save, MultaTypeDTO.class);
 	}
 
 	/**
@@ -46,14 +52,15 @@ public class MulteTypeService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public MulteType get(Long id) throws Exception {
+	public MultaTypeDTO get(Long id) throws Exception {
 		Optional<MulteType> findById = multeTypeRepository.findById(id);
 		if (findById.isPresent()) {
-			if (findById.get().getTeam() == null) {
+			MulteType multeType = findById.get();
+			if (multeType.getTeam() == null) {
 				throw new Exception("This multa isn't have a team");
 			}
-			teamService.checkTeam(findById.get().getTeam());
-			return findById.get();
+			teamService.checkTeam(multeType.getTeam().getId());
+			return multaTypeAdapter.getAdapter(multeType, MultaTypeDTO.class);
 		} else {
 			return null;
 		}
@@ -66,7 +73,7 @@ public class MulteTypeService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Iterable<MulteType> getAll() throws Exception {
+	public Iterable<MultaTypeDTO> getAll() throws Exception {
 		return teamService.getCurrentTeam().getMulteTypes();
 	}
 
@@ -80,8 +87,8 @@ public class MulteTypeService {
 	 *             the exception
 	 */
 	public boolean delete(Long id) throws Exception {
-		MulteType multeType = this.get(id);
-		multeTypeRepository.deleteById(multeType.getId());
+		this.get(id);
+		multeTypeRepository.deleteById(id);
 		return true;
 	}
 }

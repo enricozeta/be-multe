@@ -2,9 +2,6 @@ package com.teamManager.dto;
 
 import java.util.Date;
 
-import com.teamManager.model.MulteType;
-import com.teamManager.model.Player;
-
 /**
  * The Class MultaDTO.
  */
@@ -20,9 +17,13 @@ public class MultaDTO {
 
 	private boolean pagata;
 
-	private Player player;
+	private Long playerId;
 
-	private MulteType multeType;
+	private Long multeTypeId;
+
+	public MultaDTO() {
+
+	}
 
 	/**
 	 * Gets the id.
@@ -120,12 +121,12 @@ public class MultaDTO {
 	}
 
 	/**
-	 * Gets the player.
+	 * Gets the playerId.
 	 *
-	 * @return the player
+	 * @return the playerId
 	 */
-	public Player getPlayer() {
-		return player;
+	public Long getPlayerId() {
+		return playerId;
 	}
 
 	/**
@@ -134,27 +135,27 @@ public class MultaDTO {
 	 * @param player
 	 *            the new player
 	 */
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setPlayer(Long playerId) {
+		this.playerId = playerId;
 	}
 
 	/**
-	 * Gets the multe type.
+	 * Gets the multeTypeId.
 	 *
-	 * @return the multe type
+	 * @return the multeTypeId
 	 */
-	public MulteType getMulteType() {
-		return multeType;
+	public Long getmulteTypeId() {
+		return multeTypeId;
 	}
 
 	/**
-	 * Sets the multe type.
+	 * Sets the multeTypeId.
 	 *
 	 * @param multeType
-	 *            the new multe type
+	 *            the new multeTypeId
 	 */
-	public void setMulteType(MulteType multeType) {
-		this.multeType = multeType;
+	public void setMulteTypeId(Long multeTypeId) {
+		this.multeTypeId = multeTypeId;
 	}
 
 	/**
@@ -170,47 +171,21 @@ public class MultaDTO {
 	 *            the data
 	 * @param pagata
 	 *            the pagata
-	 * @param player
-	 *            the player
+	 * @param playerId
+	 *            the playerId
 	 * @param multeType
 	 *            the multe type
 	 */
-	public MultaDTO(Long id, String descrizione, double valore, Date data, boolean pagata, Player player,
-			MulteType multeType) {
+	public MultaDTO(Long id, String descrizione, double valore, Date data, boolean pagata, Long playerId,
+			Long multeTypeId) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.valore = valore;
 		this.data = data;
 		this.pagata = pagata;
-		this.player = player;
-		this.multeType = multeType;
-	}
-
-	/**
-	 * Instantiates a new multa DTO.
-	 *
-	 * @param id
-	 *            the id
-	 * @param descrizione
-	 *            the descrizione
-	 * @param valore
-	 *            the valore
-	 * @param data
-	 *            the data
-	 * @param pagata
-	 *            the pagata
-	 * @param player
-	 *            the player
-	 */
-	public MultaDTO(Long id, String descrizione, double valore, Date data, boolean pagata, Player player) {
-		super();
-		this.id = id;
-		this.descrizione = descrizione;
-		this.valore = valore;
-		this.data = data;
-		this.pagata = pagata;
-		this.player = player;
+		this.playerId = playerId;
+		this.multeTypeId = multeTypeId;
 	}
 
 }

@@ -1,5 +1,10 @@
 package com.teamManager.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.teamManager.model.Multa;
+
 /**
  * The Class PlayerHome.
  */
@@ -13,6 +18,8 @@ public class PlayerHome {
 
 	private Double total;
 
+	private List<Multa> multe = new ArrayList<>();
+
 	/**
 	 * Instantiates a new player home.
 	 *
@@ -25,11 +32,12 @@ public class PlayerHome {
 	 * @param total
 	 *            the total
 	 */
-	public PlayerHome(Long id, String name, String surname, double total) {
+	public PlayerHome(Long id, String name, String surname, double total, List<Multa> multe) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.total = total;
+		this.multe = multe;
 	}
 
 	/**
@@ -106,6 +114,25 @@ public class PlayerHome {
 	 */
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+
+	/**
+	 * Gets the multe.
+	 *
+	 * @return the multe
+	 */
+	public List<Multa> getMulte() {
+		return multe;
+	}
+
+	/**
+	 * Sets the multe.
+	 *
+	 * @param multe
+	 *            the new multe
+	 */
+	public void setMulte(List<Multa> multe) {
+		this.multe = multe;
 	}
 
 }

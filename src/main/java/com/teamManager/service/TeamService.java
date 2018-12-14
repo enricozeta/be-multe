@@ -9,13 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.adapter.TeamAdapterManager;
+import com.teamManager.dto.PlayerDTO;
 import com.teamManager.dto.PlayerHome;
-import com.teamManager.model.Player;
+import com.teamManager.dto.TeamDTO;
+import com.teamManager.model.Multa;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
@@ -39,8 +44,15 @@ public class TeamService {
 	@Autowired
 	private IUserRepository userRepository;
 
+	@Autowired
+	private TeamAdapterManager adapterManager;
+
 	@Value("${test}")
 	private String test;
+
+	public Team save(Team team) {
+		return teamRepository.save(team);
+	}
 
 	/**
 	 * Gets the current team.
@@ -49,16 +61,14 @@ public class TeamService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Team getCurrentTeam() throws Exception {
+	public TeamDTO getCurrentTeam() throws Exception {
 		String email = userService.getAuthentication().getName();
 		User user = userRepository.findByEmail(email);
 		Team team = teamRepository.findByUser(user);
 		if (team == null) {
 			throw new Exception("The current user don't have a team");
 		}
-		team.setPaid();
-		team.setNoPaid();
-		return team;
+		return adapterManager.getAdapter(team, TeamDTO.class);
 	}
 
 	/**
@@ -70,12 +80,11 @@ public class TeamService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Team checkTeam(@NonNull Team team) throws Exception {
+	public Team checkTeam(@NonNull Long teamId) throws Exception {
 		String email = userService.getAuthentication().getName();
 		User findUserByEmail = userService.findUserByEmail(email);
-		Long teamId = findUserByEmail.getTeam().getId();
-		if (team.getId().equals(teamId)) {
-			return team;
+		if (findUserByEmail.getTeam().getId().equals(teamId)) {
+			return teamRepository.findById(teamId).get();
 		} else {
 			throw new Exception("Forbidden");
 		}
@@ -90,9 +99,11 @@ public class TeamService {
 	 */
 	public List<PlayerHome> getWorst() throws Exception {
 		List<PlayerHome> worstPlayer = new ArrayList<>();
-		Map<Player, Double> result = getPlayerForHome();
-		for (Player player : result.keySet()) {
-			worstPlayer.add(new PlayerHome(player.getId(), player.getName(), player.getSurname(), result.get(player)));
+		Map<PlayerDTO, List<Multa>> result = getPlayerForHome();
+		for (PlayerDTO player : result.keySet()) {
+			double total = multeService.getTotal(result.get(player));
+			worstPlayer.add(
+					new PlayerHome(player.getId(), player.getName(), player.getSurname(), total, result.get(player)));
 		}
 		Collections.sort(worstPlayer, new Comparator<PlayerHome>() {
 			@Override
@@ -115,9 +126,11 @@ public class TeamService {
 	 */
 	public List<PlayerHome> getBest() throws Exception {
 		List<PlayerHome> bestPlayers = new ArrayList<>();
-		Map<Player, Double> result = getPlayerForHome();
-		for (Player player : result.keySet()) {
-			bestPlayers.add(new PlayerHome(player.getId(), player.getName(), player.getSurname(), result.get(player)));
+		Map<PlayerDTO, List<Multa>> result = getPlayerForHome();
+		for (PlayerDTO player : result.keySet()) {
+			double total = multeService.getTotal(result.get(player));
+			bestPlayers.add(
+					new PlayerHome(player.getId(), player.getName(), player.getSurname(), total, result.get(player)));
 		}
 		Collections.sort(bestPlayers, new Comparator<PlayerHome>() {
 			@Override
@@ -138,26 +151,26 @@ public class TeamService {
 	 *             the exception
 	 */
 	public void resetTotal() throws Exception {
-		Team currentTeam = getCurrentTeam();
-		List<Player> players = currentTeam.getPlayers();
+		TeamDTO currentTeam = getCurrentTeam();
+		List<PlayerDTO> players = currentTeam.getPlayers();
 		double total = 0;
-		for (Player player : players) {
+		for (PlayerDTO player : players) {
 			total += player.getMultePagate();
 		}
 		currentTeam.setPaid(total);
 	}
 
-	private Map<Player, Double> getPlayerForHome() throws Exception {
-		Map<Player, Double> result = new HashMap<>();
-		Team team = this.getCurrentTeam();
-		List<Player> players = team.getPlayers();
+	private Map<PlayerDTO, List<Multa>> getPlayerForHome() throws Exception {
+		Map<PlayerDTO, List<Multa>> result = new HashMap<>();
+		TeamDTO team = this.getCurrentTeam();
+		List<PlayerDTO> players = team.getPlayers();
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
 		Date oneMonthAgo = cal.getTime();
 		Date today = new Date();
-		for (Player player : players) {
-			double total = multeService.getTotal(multeService.getMulteWithFilter(player, oneMonthAgo, today));
-			result.put(player, total);
+		for (PlayerDTO player : players) {
+			List<Multa> multeWithFilter = multeService.getMulteWithFilter(player, oneMonthAgo, today);
+			result.put(player, multeWithFilter);
 		}
 		return result;
 

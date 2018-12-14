@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.teamManager.dto.TeamDTO;
 import com.teamManager.model.User;
+import com.teamManager.service.TeamService;
 import com.teamManager.service.UserService;
 
 /**
@@ -22,6 +24,9 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private TeamService teamService;
 
 	/**
 	 * Login.
@@ -69,6 +74,7 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
+			user.setTeam(teamService.save(user.getTeam()));
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());

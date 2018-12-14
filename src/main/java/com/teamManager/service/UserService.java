@@ -3,6 +3,7 @@ package com.teamManager.service;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 
+import com.teamManager.dto.UserDTO;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 
@@ -27,6 +28,15 @@ public interface UserService {
 	 *            the user
 	 */
 	public void saveUser(User user);
+
+	/**
+	 * Update user.
+	 *
+	 * @param user
+	 *            the user
+	 * @return the user
+	 */
+	public User updateUser(UserDTO user);
 
 	/**
 	 * Creates the staff user.

@@ -46,6 +46,8 @@ public class Team {
 	@JsonManagedReference
 	private List<MulteType> multeTypes;
 
+	private double fondoCassa;
+
 	/**
 	 * Gets the id.
 	 *
@@ -113,30 +115,12 @@ public class Team {
 	}
 
 	/**
-	 * Sets the paid.
-	 */
-	public void setPaid() {
-		for (Player player : this.players) {
-			this.paid = this.getPaid() + player.getMultePagate();
-		}
-	}
-
-	/**
 	 * Gets the no paid.
 	 *
 	 * @return the no paid
 	 */
 	public double getNoPaid() {
 		return this.NoPaid;
-	}
-
-	/**
-	 * Sets the no paid.
-	 */
-	public void setNoPaid() {
-		for (Player player : this.players) {
-			this.NoPaid = this.getNoPaid() + player.getMulteNonPagate();
-		}
 	}
 
 	/**
@@ -195,6 +179,25 @@ public class Team {
 	 */
 	public void setNoPaid(double noPaid) {
 		NoPaid = noPaid;
+	}
+
+	/**
+	 * Gets the fondo cassa.
+	 *
+	 * @return the fondo cassa
+	 */
+	public double getFondoCassa() {
+		return fondoCassa;
+	}
+
+	/**
+	 * Sets the fondo cassa.
+	 *
+	 * @param fondoCassa
+	 *            the new fondo cassa
+	 */
+	public void setFondoCassa(double fondoCassa) {
+		this.fondoCassa = fondoCassa;
 	}
 
 }

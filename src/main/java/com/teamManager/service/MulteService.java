@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.adapter.MultaAdpterManager;
+import com.teamManager.adapter.PlayerAdapterManager;
 import com.teamManager.dto.MultaDTO;
+import com.teamManager.dto.PlayerDTO;
 import com.teamManager.model.Multa;
 import com.teamManager.model.Player;
 import com.teamManager.repository.IMultaRepository;
@@ -25,10 +28,10 @@ import com.teamManager.repository.IMultaRepository;
 public class MulteService {
 
 	@Autowired
-	private PlayerService playerService = new PlayerService();
+	private PlayerService playerService;
 
 	@Autowired
-	private TeamService teamService = new TeamService();
+	private TeamService teamService;
 
 	@Autowired
 	private IMultaRepository multaRepository;
@@ -37,6 +40,12 @@ public class MulteService {
 	private EntityManager entityManager;
 
 	private static final String MULTA_ERROR = "This multa isn't in your team";
+
+	@Autowired
+	private MultaAdpterManager adpterManager;
+
+	@Autowired
+	private PlayerAdapterManager playerAdapterManager;
 
 	/**
 	 * Adds the update.
@@ -47,17 +56,11 @@ public class MulteService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public Multa addUpdate(@NonNull Multa multa) throws Exception {
-		Player player = playerService.getPlayerById(multa.getPlayer().getId());
+	public MultaDTO addUpdate(@NonNull MultaDTO multa) throws Exception {
+		PlayerDTO player = playerService.getPlayerById(multa.getPlayerId());
 		if (player != null) {
-			Multa result = multaRepository.save(multa);
-			if (result.isPagata()) {
-				player.setMultePagate(player.getMultePagate() + result.getValore());
-			} else {
-				player.setMulteNonPagate(player.getMulteNonPagate() + result.getValore());
-			}
-			playerService.update(player);
-			return result;
+			Multa result = multaRepository.save(adpterManager.getAdapter(multa, Multa.class));
+			return adpterManager.getAdapter(result, MultaDTO.class);
 		} else {
 			throw new Exception("This multa is invalid");
 		}
@@ -70,10 +73,10 @@ public class MulteService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public List<Multa> getAllOfTeam() throws Exception {
-		List<Player> players = teamService.getCurrentTeam().getPlayers();
-		List<Multa> result = new ArrayList<>();
-		for (Player player : players) {
+	public List<MultaDTO> getAllOfTeam() throws Exception {
+		List<PlayerDTO> players = teamService.getCurrentTeam().getPlayers();
+		List<MultaDTO> result = new ArrayList<>();
+		for (PlayerDTO player : players) {
 			result.addAll(player.getMulte());
 		}
 		return result;
@@ -94,10 +97,9 @@ public class MulteService {
 			if (!multa.isPresent()) {
 				throw new Exception(MULTA_ERROR);
 			}
-			playerService.getPlayerById(multa.get().getPlayer().getId());
 			Multa result = multa.get();
-			return new MultaDTO(result.getId(), result.getDescrizione(), result.getValore(), result.getData(),
-					result.isPagata(), result.getPlayer(), result.getMulteType());
+			teamService.checkTeam(multa.get().getPlayer().getTeam().getId());
+			return adpterManager.getAdapter(result, MultaDTO.class);
 		} catch (Exception e) {
 			throw new Exception(MULTA_ERROR);
 		}
@@ -113,24 +115,9 @@ public class MulteService {
 	 *             the exception
 	 */
 	public boolean delete(@NonNull Long id) throws Exception {
-		Optional<Multa> multa = multaRepository.findById(id);
-		if (!multa.isPresent()) {
-			throw new Exception(MULTA_ERROR);
-		}
-		Player player = playerService.getPlayerById(multa.get().getPlayer().getId());
-		if (player != null) {
-			Multa result = multa.get();
-			if (result.isPagata()) {
-				player.setMultePagate(player.getMultePagate() - result.getValore());
-			} else {
-				player.setMulteNonPagate(player.getMulteNonPagate() - result.getValore());
-			}
-			playerService.update(player);
-			multaRepository.deleteById(result.getId());
-			return true;
-		} else {
-			throw new Exception(MULTA_ERROR);
-		}
+		this.getById(id);
+		multaRepository.deleteById(id);
+		return true;
 	}
 
 	/**
@@ -143,11 +130,12 @@ public class MulteService {
 	 * @param today
 	 *            the today
 	 * @return the multe with filter
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Multa> getMulteWithFilter(Player player, Date oneMonthAgo, Date today) {
+	public List<Multa> getMulteWithFilter(PlayerDTO player, Date oneMonthAgo, Date today) throws Exception {
 		Query query = entityManager.createQuery("FROM Multa as m WHERE m.player = ? AND m.data <= ? AND m.data >= ?");
-		query.setParameter(0, player);
+		query.setParameter(0, playerAdapterManager.getAdapter(player, Player.class));
 		query.setParameter(1, today);
 		query.setParameter(2, oneMonthAgo);
 		return query.getResultList();

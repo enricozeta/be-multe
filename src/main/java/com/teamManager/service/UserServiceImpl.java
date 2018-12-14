@@ -15,7 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.teamManager.adapter.TeamAdapterManager;
 import com.teamManager.configuration.MailSenderConfig;
+import com.teamManager.dto.TeamDTO;
+import com.teamManager.dto.UserDTO;
 import com.teamManager.model.Role;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
@@ -45,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private TeamAdapterManager adapterManager;
 
 	@Value("${test}")
 	private String test;
@@ -74,6 +80,14 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userRepository.save(user);
 	}
+	
+	@Override
+	public User updateUser(UserDTO user) {
+		User findByEmail = userRepository.findByEmail(user.getEmail());
+		findByEmail.setName(user.getName());
+		findByEmail.setLastName(user.getSurname());
+		return userRepository.save(findByEmail);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -86,11 +100,11 @@ public class UserServiceImpl implements UserService {
 	public User createStaffUser(User user) throws Exception {
 
 		// set user's fields
-		Team currentTeam = teamService.getCurrentTeam();
+		TeamDTO currentTeam = teamService.getCurrentTeam();
 		String name = currentTeam.getName();
 		user.setEmail(name);
 		user.setName(name);
-		user.setTeam(currentTeam);
+		user.setTeam(adapterManager.getAdapter(currentTeam, Team.class));
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setActive(1);
 

@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		if ("false".equals(test)) {
+		if (Boolean.FALSE.toString().equals(test)) {
 			http.cors().and().authorizeRequests().antMatchers("/registration").permitAll().antMatchers("/login")
 					.permitAll().antMatchers("/admin/**").hasAuthority("ADMIN").antMatchers("/**").hasAuthority("STAFF")
 					.anyRequest().authenticated().and().csrf().disable().formLogin().loginPage("/login")

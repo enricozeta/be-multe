@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamManager.dto.MultaDTO;
-import com.teamManager.model.Multa;
-import com.teamManager.repository.IMultaRepository;
 import com.teamManager.service.MulteService;
 
 /**
@@ -21,9 +19,6 @@ import com.teamManager.service.MulteService;
 @Controller
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class MulteController {
-
-	@Autowired
-	private IMultaRepository multaRepository;
 
 	@Autowired
 	private MulteService multeService = new MulteService();
@@ -38,9 +33,8 @@ public class MulteController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody Boolean add(@RequestBody Multa multa) throws Exception {
-		multaRepository.save(multeService.addUpdate(multa));
-		return true;
+	public @ResponseBody MultaDTO add(@RequestBody MultaDTO multa) throws Exception {
+		return multeService.addUpdate(multa);
 	}
 
 	/**
@@ -53,9 +47,8 @@ public class MulteController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody Boolean update(@RequestBody Multa multa) throws Exception {
-		multaRepository.save(multeService.addUpdate(multa));
-		return true;
+	public @ResponseBody MultaDTO update(@RequestBody MultaDTO multa) throws Exception {
+		return multeService.addUpdate(multa);
 	}
 
 	/**
@@ -80,7 +73,7 @@ public class MulteController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "multa/all" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Iterable<Multa> getAll() throws Exception {
+	public @ResponseBody Iterable<MultaDTO> getAll() throws Exception {
 		return multeService.getAllOfTeam();
 	}
 
@@ -92,7 +85,7 @@ public class MulteController {
 	 * @return the boolean
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = { "admin/multa" }, method = RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) throws Exception {
 		return multeService.delete(id);
 	}

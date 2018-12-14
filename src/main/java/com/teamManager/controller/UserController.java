@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,6 +66,21 @@ public class UserController {
 			} else {
 				throw new Exception("User logged not found");
 			}
+		} else {
+			throw new Exception("User logged not found");
+		}
+	}
+	
+	@RequestMapping(value = { "admin/user" }, method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody User save(@RequestBody UserDTO user) throws Exception {
+		String email = userService.getAuthentication().getName();
+		if (email != null) {
+			User getUser = userRepository.findByEmail(email);
+			if (user != null && user.getEmail().equals(email)) {
+				userService.updateUser(user);
+				return getUser;
+			}
+			throw new Exception("User logged not found");
 		} else {
 			throw new Exception("User logged not found");
 		}

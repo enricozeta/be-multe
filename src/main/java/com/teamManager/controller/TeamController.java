@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.teamManager.adapter.TeamAdapterManager;
 import com.teamManager.dto.PlayerHome;
+import com.teamManager.dto.TeamDTO;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
@@ -37,7 +39,10 @@ public class TeamController {
 	private IUserRepository userRepository;
 
 	@Autowired
-	private TeamService teamService = new TeamService();
+	private TeamService teamService;
+
+	@Autowired
+	private TeamAdapterManager adapterManager;
 
 	/**
 	 * Adds the.
@@ -45,13 +50,14 @@ public class TeamController {
 	 * @param team
 	 *            the team
 	 * @return the boolean
+	 * @throws Exception
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody Boolean add(@RequestBody Team team) {
+	public @ResponseBody Boolean add(@RequestBody TeamDTO team) throws Exception {
 		String email = userService.getAuthentication().getName();
 		User user = userRepository.findByEmail(email);
-		team.setUser(user);
-		teamRepository.save(team);
+		team.setUserId(user.getId());
+		teamRepository.save(adapterManager.getAdapter(team, Team.class));
 		return true;
 	}
 
@@ -65,8 +71,8 @@ public class TeamController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody Boolean update(@RequestBody Team team) throws Exception {
-		teamRepository.save(teamService.checkTeam(team));
+	public @ResponseBody Boolean update(@RequestBody TeamDTO team) throws Exception {
+		teamRepository.save(teamService.checkTeam(team.getId()));
 		return true;
 	}
 
@@ -78,7 +84,7 @@ public class TeamController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "team" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody Team get() throws Exception {
+	public @ResponseBody TeamDTO get() throws Exception {
 		return teamService.getCurrentTeam();
 	}
 
@@ -105,7 +111,7 @@ public class TeamController {
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.DELETE, produces = { "application/json" })
 	public @ResponseBody void delete() throws Exception {
-		teamRepository.delete(teamService.getCurrentTeam());
+		teamRepository.delete(adapterManager.getAdapter(teamService.getCurrentTeam(), Team.class));
 	}
 
 	/**
