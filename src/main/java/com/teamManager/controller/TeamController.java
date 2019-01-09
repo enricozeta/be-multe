@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.teamManager.adapter.TeamAdapterManager;
 import com.teamManager.dto.PlayerHome;
 import com.teamManager.dto.TeamDTO;
+import com.teamManager.dto.UserDTO;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
@@ -51,6 +52,7 @@ public class TeamController {
 	 *            the team
 	 * @return the boolean
 	 * @throws Exception
+	 *             the exception
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody TeamDTO team) throws Exception {
@@ -97,9 +99,21 @@ public class TeamController {
 	 * @throws Exception
 	 *             the exception
 	 */
-	@RequestMapping(value = "admin/createStaffUser", method = RequestMethod.POST)
-	public @ResponseBody User createStaffUser(@Valid User user) throws Exception {
+	@RequestMapping(value = "admin/staffUser", method = RequestMethod.POST)
+	public @ResponseBody User createStaffUser(@Valid UserDTO user) throws Exception {
 		return userService.createStaffUser(user);
+	}
+
+	/**
+	 * Gets the staff user.
+	 *
+	 * @return the staff user
+	 * @throws Exception
+	 *             the exception
+	 */
+	@RequestMapping(value = { "staffUser" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody User getStaffUser() throws Exception {
+		return userService.getStaffUser();
 	}
 
 	/**

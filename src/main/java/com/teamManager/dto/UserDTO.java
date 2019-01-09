@@ -21,6 +21,8 @@ public class UserDTO {
 
 	private String team;
 
+	private String password;
+
 	/**
 	 * Gets the email.
 	 *
@@ -133,6 +135,25 @@ public class UserDTO {
 	 */
 	public void setTeam(String team) {
 		this.team = team;
+	}
+
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * Sets the password.
+	 *
+	 * @param password
+	 *            the new password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

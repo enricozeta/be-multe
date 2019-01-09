@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private TeamAdapterManager adapterManager;
 
@@ -80,13 +80,20 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userRepository.save(user);
 	}
-	
+
 	@Override
 	public User updateUser(UserDTO user) {
 		User findByEmail = userRepository.findByEmail(user.getEmail());
 		findByEmail.setName(user.getName());
 		findByEmail.setLastName(user.getSurname());
 		return userRepository.save(findByEmail);
+	}
+
+	@Override
+	public User getStaffUser() throws Exception {
+		TeamDTO currentTeam = teamService.getCurrentTeam();
+		String name = currentTeam.getName();
+		return userRepository.findByEmail(name);
 	}
 
 	/*
@@ -97,15 +104,16 @@ public class UserServiceImpl implements UserService {
 	 * .User)
 	 */
 	@Override
-	public User createStaffUser(User user) throws Exception {
+	public User createStaffUser(UserDTO userDTO) throws Exception {
 
 		// set user's fields
 		TeamDTO currentTeam = teamService.getCurrentTeam();
 		String name = currentTeam.getName();
+		User user = new User();
 		user.setEmail(name);
 		user.setName(name);
 		user.setTeam(adapterManager.getAdapter(currentTeam, Team.class));
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 		user.setActive(1);
 
 		Role staffRole = roleRepository.findByRole("STAFF");

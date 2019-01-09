@@ -47,7 +47,16 @@ public interface UserService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public User createStaffUser(User user) throws Exception;
+	public User createStaffUser(UserDTO user) throws Exception;
+
+	/**
+	 * Gets the staff user.
+	 *
+	 * @return the staff user
+	 * @throws Exception
+	 *             the exception
+	 */
+	public User getStaffUser() throws Exception;
 
 	/**
 	 * Check staff user.

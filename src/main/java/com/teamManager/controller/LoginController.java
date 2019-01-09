@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.teamManager.dto.TeamDTO;
 import com.teamManager.model.User;
 import com.teamManager.service.TeamService;
 import com.teamManager.service.UserService;

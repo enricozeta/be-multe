@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.teamManager.model.DBFile;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileController.
  */
