@@ -2,6 +2,7 @@ package com.teamManager.service;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.teamManager.dto.UserDTO;
 import com.teamManager.model.Team;
@@ -27,7 +28,7 @@ public interface UserService {
 	 * @param user
 	 *            the user
 	 */
-	public void saveUser(User user);
+	public User saveUser(User user);
 
 	/**
 	 * Update user.
@@ -91,5 +92,7 @@ public interface UserService {
 	 * @return the authentication
 	 */
 	public Authentication getAuthentication();
+
+	public UserDetails loadUserByUsername(String username);
 
 }

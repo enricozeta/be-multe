@@ -23,6 +23,7 @@ import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
 import com.teamManager.repository.IUserRepository;
+import com.teamManager.security.jwt.UserPrinciple;
 
 /**
  * The Class TeamService.
@@ -48,6 +49,10 @@ public class TeamService {
 	@Value("${test}")
 	private String test;
 
+	public Team save(TeamDTO team) throws Exception {
+		return teamRepository.save(adapterManager.getAdapter(team, Team.class));
+	}
+
 	public Team save(Team team) {
 		return teamRepository.save(team);
 	}
@@ -60,7 +65,8 @@ public class TeamService {
 	 *             the exception
 	 */
 	public TeamDTO getCurrentTeam() throws Exception {
-		String email = userService.getAuthentication().getName();
+		UserPrinciple userPrincipal = (UserPrinciple) userService.getAuthentication().getPrincipal();
+		String email = userPrincipal.getEmail();
 		User user = userRepository.findByEmail(email);
 		Team team = teamRepository.findByUser(user);
 		if (team == null) {

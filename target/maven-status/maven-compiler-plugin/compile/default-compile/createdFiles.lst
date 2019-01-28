@@ -1,5 +1,5 @@
-com/teamManager/controller/MulteTypeController.class
 com/teamManager/controller/TeamController.class
+com/teamManager/controller/MulteTypeController.class
 com/teamManager/model/Role.class
 com/teamManager/dto/UserDTO.class
 com/teamManager/Application.class
@@ -27,5 +27,5 @@ com/teamManager/service/MulteService.class
 com/teamManager/controller/UserController.class
 com/teamManager/controller/PlayerController.class
 com/teamManager/model/User.class
-com/teamManager/model/Team.class
 com/teamManager/repository/IPlayerRepository.class
+com/teamManager/model/Team.class

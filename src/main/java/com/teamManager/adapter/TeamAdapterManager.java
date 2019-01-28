@@ -76,9 +76,11 @@ public class TeamAdapterManager implements AdapterService {
 		entity.setName(dto.getName());
 		entity.setPlayers(getPlayerDTOs(dto));
 		entity.setFondoCassa(dto.getFondoCassa());
-		
-		Optional<User> user = userRepository.findById(dto.getUserId());
-		entity.setUser(user.isPresent() ? user.get() : null);
+
+		if (dto.getUserId() != null) {
+			Optional<User> user = userRepository.findById(dto.getUserId());
+			entity.setUser(user.isPresent() ? user.get() : null);
+		}
 
 		return entity;
 	}

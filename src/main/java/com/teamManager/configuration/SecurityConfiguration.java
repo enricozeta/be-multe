@@ -14,10 +14,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.teamManager.security.jwt.JwtAuthEntryPoint;
+import com.teamManager.security.jwt.JwtAuthTokenFilter;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -35,6 +39,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Value("${test}")
 	private String test;
 
+	@Autowired
+	private JwtAuthEntryPoint unauthorizedHandler;
+
+	@Bean
+	public JwtAuthTokenFilter authenticationJwtTokenFilter() {
+		return new JwtAuthTokenFilter();
+	}
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().usersByUsernameQuery(usersQuery).authoritiesByUsernameQuery(rolesQuery)
@@ -44,19 +56,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		if (Boolean.FALSE.toString().equals(test)) {
-			http.cors().and().authorizeRequests().antMatchers("/registration").permitAll().antMatchers("/login")
-					.permitAll().antMatchers("/admin/**").hasAuthority("ADMIN").antMatchers("/**").hasAuthority("STAFF")
-					.anyRequest().authenticated().and().csrf().disable().formLogin().loginPage("/login")
-					.failureUrl("/login?error=true").defaultSuccessUrl("/#/home", true).usernameParameter("email")
-					.passwordParameter("password").and().logout()
-					.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and()
-					.exceptionHandling().accessDeniedPage("/access-denied").and()
-					// enabling the basic authentication
-					.httpBasic().and()
-					// configuring the session on the server
-					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
-					// disabling the CSRF - Cross Site Request Forgery
-					.csrf().disable();
+			http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/auth/**").permitAll().anyRequest()
+					.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+			http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		} else {
 			http.cors().and().authorizeRequests().antMatchers("/**").permitAll().and()
 					// enabling the basic authentication

@@ -12,8 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.teamManager.adapter.TeamAdapterManager;
 import com.teamManager.configuration.MailSenderConfig;
@@ -24,6 +27,7 @@ import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.IRoleRepository;
 import com.teamManager.repository.IUserRepository;
+import com.teamManager.security.jwt.UserPrinciple;
 
 /**
  * The Class UserServiceImpl.
@@ -73,12 +77,12 @@ public class UserServiceImpl implements UserService {
 	 * com.teamManager.service.UserService#saveUser(com.teamManager.model.User)
 	 */
 	@Override
-	public void saveUser(User user) {
+	public User saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setActive(1);
 		Role userRole = roleRepository.findByRole("ADMIN");
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	@Override
@@ -173,6 +177,18 @@ public class UserServiceImpl implements UserService {
 			authentication = authenticationManager.authenticate(authReq);
 		}
 		return authentication;
+	}
+
+	@Override
+	@Transactional
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+		User user = userRepository.findByEmail(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User Not Found with -> username or email : " + username);
+		}
+
+		return UserPrinciple.build(user);
 	}
 
 }
