@@ -1,7 +1,6 @@
 package com.teamManager.service;
 
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.teamManager.dto.UserDTO;
@@ -86,12 +85,7 @@ public interface UserService {
 	public boolean changePassword(@NonNull String email, @NonNull String oldPassword, @NonNull String newPassword,
 			Boolean forgot) throws Exception;
 
-	/**
-	 * Gets the authentication.
-	 *
-	 * @return the authentication
-	 */
-	public Authentication getAuthentication();
+	public String getAuthentication();
 
 	public UserDetails loadUserByUsername(String username);
 

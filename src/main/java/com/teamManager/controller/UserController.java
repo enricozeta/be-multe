@@ -48,7 +48,7 @@ public class UserController {
 
 	@RequestMapping(value = { "user" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody UserDTO get() throws Exception {
-		String email = userService.getAuthentication().getName();
+		String email = userService.getAuthentication();
 		if (email != null) {
 			User user = userRepository.findByEmail(email);
 			if (user != null) {
@@ -73,7 +73,7 @@ public class UserController {
 	
 	@RequestMapping(value = { "admin/user" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody User save(@RequestBody UserDTO user) throws Exception {
-		String email = userService.getAuthentication().getName();
+		String email = userService.getAuthentication();
 		if (email != null) {
 			User getUser = userRepository.findByEmail(email);
 			if (user != null && user.getEmail().equals(email)) {

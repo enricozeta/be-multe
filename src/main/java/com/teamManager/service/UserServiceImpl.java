@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 				message.setSubject("Reset Password");
 				message.setText("La tua nuova password è temp1234567temp. Ricordati di modificarla");
 			} else {
-				if (this.getAuthentication().getName().equals(email)) {
+				if (this.getAuthentication().equals(email)) {
 					if (bCryptPasswordEncoder.matches(user.getPassword(), oldPassword)) {
 						user.setPassword(bCryptPasswordEncoder.encode(newPassword));
 					} else {
@@ -169,14 +169,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Authentication getAuthentication() {
+	public String getAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ("true".equals(test) && authentication.getPrincipal().toString().equals("anonymousUser")) {
 			UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken("nicola@nicola.it",
 					"nicola");
 			authentication = authenticationManager.authenticate(authReq);
 		}
-		return authentication;
+		com.teamManager.security.jwt.UserPrinciple userPrincipal = (com.teamManager.security.jwt.UserPrinciple) authentication
+				.getPrincipal();
+		return userPrincipal.getEmail();
 	}
 
 	@Override

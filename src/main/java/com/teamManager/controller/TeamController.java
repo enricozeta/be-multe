@@ -56,7 +56,7 @@ public class TeamController {
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody Boolean add(@RequestBody TeamDTO team) throws Exception {
-		String email = userService.getAuthentication().getName();
+		String email = userService.getAuthentication();
 		User user = userRepository.findByEmail(email);
 		team.setUserId(user.getId());
 		teamRepository.save(adapterManager.getAdapter(team, Team.class));
