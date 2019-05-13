@@ -1,5 +1,8 @@
 package com.teamManager.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -77,6 +80,17 @@ public class MulteTypeController {
 		return multeTypeService.getAll();
 	}
 
+	@RequestMapping(value = { "multaType/enabled/all" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody Iterable<MultaTypeDTO> getAllEnabled() throws Exception {
+		List<MultaTypeDTO> result = new ArrayList<>();
+		multeTypeService.getAll().forEach((multaType -> {
+			if (multaType.isEnabled()) {
+				result.add(multaType);
+			}
+		}));
+		return result;
+	}
+
 	/**
 	 * Delete.
 	 *
@@ -87,6 +101,20 @@ public class MulteTypeController {
 	 */
 	@RequestMapping(value = { "admin/multaType" }, method = RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody Boolean delete(@NonNull @RequestParam Long id) throws Exception {
-		return multeTypeService.delete(id);
+		return multeTypeService.disable(id);
+	}
+
+	/**
+	 * Update.
+	 *
+	 * @param multaType
+	 *            the multa type
+	 * @return the boolean
+	 * @throws Exception
+	 *             the exception
+	 */
+	@RequestMapping(value = { "admin/multaType/disable" }, method = RequestMethod.DELETE, consumes = "application/json")
+	public @ResponseBody Boolean disable(@NonNull @RequestParam Long id) throws Exception {
+		return multeTypeService.disable(id);
 	}
 }

@@ -45,6 +45,7 @@ public class MulteTypeAdapter implements AdapterService {
 		dto.setDescrizione(entity.getDescrizione());
 		dto.setTeamId(entity.getTeam().getId());
 		dto.setValore(entity.getValore());
+		dto.setEnabled(entity.isEnabled());
 
 		return dto;
 	}
@@ -60,6 +61,7 @@ public class MulteTypeAdapter implements AdapterService {
 		Optional<Team> team = teamRepository.findById(dto.getTeamId());
 		entity.setTeam(team.isPresent() ? team.get() : null);
 		entity.setValore(dto.getValore());
+		entity.setEnabled(dto.isEnabled());
 
 		return entity;
 	}

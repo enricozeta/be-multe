@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamManager.adapter.TeamAdapterManager;
-import com.teamManager.dto.PlayerHome;
+import com.teamManager.dto.CharDataDTO;
+import com.teamManager.dto.PlayerDTO;
 import com.teamManager.dto.TeamDTO;
 import com.teamManager.dto.UserDTO;
 import com.teamManager.model.Team;
@@ -136,7 +137,7 @@ public class TeamController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "team/worst" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody List<PlayerHome> getWorst() throws Exception {
+	public @ResponseBody List<PlayerDTO> getWorst() throws Exception {
 		return teamService.getWorst();
 	}
 
@@ -148,7 +149,7 @@ public class TeamController {
 	 *             the exception
 	 */
 	@RequestMapping(value = { "team/best" }, method = RequestMethod.GET, produces = { "application/json" })
-	public @ResponseBody List<PlayerHome> getBest() throws Exception {
+	public @ResponseBody List<PlayerDTO> getBest() throws Exception {
 		return teamService.getBest();
 	}
 
@@ -162,4 +163,10 @@ public class TeamController {
 	public @ResponseBody void resetTotal() throws Exception {
 		teamService.resetTotal();
 	}
+
+	@RequestMapping(value = { "team/chartData" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody List<CharDataDTO> getChartData() throws Exception {
+		return teamService.getChartData();
+	}
+
 }

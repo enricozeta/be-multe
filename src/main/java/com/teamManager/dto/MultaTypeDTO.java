@@ -15,6 +15,8 @@ public class MultaTypeDTO {
 	@NonNull
 	private Long teamId;
 
+	private boolean enabled = true;
+
 	public Long getId() {
 		return id;
 	}
@@ -45,6 +47,14 @@ public class MultaTypeDTO {
 
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

@@ -1,13 +1,13 @@
 package com.teamManager.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.Tuple;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +15,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.teamManager.adapter.TeamAdapterManager;
+import com.teamManager.dto.CharDataDTO;
 import com.teamManager.dto.PlayerDTO;
-import com.teamManager.dto.PlayerHome;
 import com.teamManager.dto.TeamDTO;
-import com.teamManager.model.Multa;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
 import com.teamManager.repository.ITeamRepository;
@@ -35,9 +34,6 @@ public class TeamService {
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private MulteService multeService;
 
 	@Autowired
 	private IUserRepository userRepository;
@@ -99,24 +95,17 @@ public class TeamService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public List<PlayerHome> getWorst() throws Exception {
-		List<PlayerHome> worstPlayer = new ArrayList<>();
-		Map<PlayerDTO, List<Multa>> result = getPlayerForHome();
-		for (PlayerDTO player : result.keySet()) {
-			double total = multeService.getTotal(result.get(player));
-			worstPlayer.add(
-					new PlayerHome(player.getId(), player.getName(), player.getSurname(), total, result.get(player)));
-		}
-		Collections.sort(worstPlayer, new Comparator<PlayerHome>() {
+	public List<PlayerDTO> getWorst() throws Exception {
+		List<PlayerDTO> players = this.getCurrentTeam().getPlayers();
+		players.sort(new Comparator<PlayerDTO>() {
 			@Override
-			public int compare(PlayerHome p1, PlayerHome p2) {
-				return -(p1.getTotal().compareTo(p2.getTotal()));
+			public int compare(PlayerDTO p1, PlayerDTO p2) {
+				return (int) ((p1.getMultePagate() + p1.getMulteNonPagate())
+						- (p2.getMultePagate() + p2.getMulteNonPagate())) * (-1);
 			}
+
 		});
-		if (worstPlayer.size() > 5) {
-			return worstPlayer.subList(0, 5);
-		}
-		return worstPlayer;
+		return players;
 	}
 
 	/**
@@ -126,24 +115,17 @@ public class TeamService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public List<PlayerHome> getBest() throws Exception {
-		List<PlayerHome> bestPlayers = new ArrayList<>();
-		Map<PlayerDTO, List<Multa>> result = getPlayerForHome();
-		for (PlayerDTO player : result.keySet()) {
-			double total = multeService.getTotal(result.get(player));
-			bestPlayers.add(
-					new PlayerHome(player.getId(), player.getName(), player.getSurname(), total, result.get(player)));
-		}
-		Collections.sort(bestPlayers, new Comparator<PlayerHome>() {
+	public List<PlayerDTO> getBest() throws Exception {
+		List<PlayerDTO> players = this.getCurrentTeam().getPlayers();
+		players.sort(new Comparator<PlayerDTO>() {
 			@Override
-			public int compare(PlayerHome p1, PlayerHome p2) {
-				return p1.getTotal().compareTo(p2.getTotal());
+			public int compare(PlayerDTO p1, PlayerDTO p2) {
+				return (int) ((p1.getMultePagate() + p1.getMulteNonPagate())
+						- (p2.getMultePagate() + p2.getMulteNonPagate()));
 			}
+
 		});
-		if (bestPlayers.size() > 5) {
-			return bestPlayers.subList(0, 5);
-		}
-		return bestPlayers;
+		return players;
 	}
 
 	/**
@@ -162,20 +144,23 @@ public class TeamService {
 		currentTeam.setPaid(total);
 	}
 
-	private Map<PlayerDTO, List<Multa>> getPlayerForHome() throws Exception {
-		Map<PlayerDTO, List<Multa>> result = new HashMap<>();
-		TeamDTO team = this.getCurrentTeam();
-		List<PlayerDTO> players = team.getPlayers();
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -1);
-		Date oneMonthAgo = cal.getTime();
-		Date today = new Date();
-		for (PlayerDTO player : players) {
-			List<Multa> multeWithFilter = multeService.getMulteWithFilter(player, oneMonthAgo, today);
-			result.put(player, multeWithFilter);
-		}
-		return result;
+	public List<CharDataDTO> getChartData() throws Exception {
+		List<CharDataDTO> result = new ArrayList<>();
+		List<Tuple> chartData = teamRepository.getChartData(String.valueOf(this.getCurrentTeam().getId()));
+		for (int i = 0; i < chartData.size(); i++) {
+			Tuple item = chartData.get(i);
+			if (i != 0) {
+				CharDataDTO prec = result.get(i - 1);
+				result.add(new CharDataDTO(item.get(0, Integer.class), item.get(1, Integer.class),
+						item.get(2, Double.class) + prec.getValue()));
+			} else {
+				result.add(new CharDataDTO(item.get(0, Integer.class), item.get(1, Integer.class),
+						item.get(2, Double.class)));
+			}
 
+		}
+		result.sort(Comparator.comparing(CharDataDTO::getSort));
+		return result;
 	}
 
 }

@@ -176,9 +176,9 @@ public class UserServiceImpl implements UserService {
 					"nicola");
 			authentication = authenticationManager.authenticate(authReq);
 		}
-		com.teamManager.security.jwt.UserPrinciple userPrincipal = (com.teamManager.security.jwt.UserPrinciple) authentication
+		org.springframework.security.core.userdetails.User userPrincipal = (org.springframework.security.core.userdetails.User) authentication
 				.getPrincipal();
-		return userPrincipal.getEmail();
+		return userPrincipal.getUsername();
 	}
 
 	@Override

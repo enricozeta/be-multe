@@ -28,6 +28,8 @@ public class MulteType {
 	@JsonBackReference
 	private Team team;
 
+	private boolean enabled;
+
 	/**
 	 * Gets the team.
 	 *
@@ -102,6 +104,14 @@ public class MulteType {
 	 */
 	public void setValore(double valore) {
 		this.valore = valore;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

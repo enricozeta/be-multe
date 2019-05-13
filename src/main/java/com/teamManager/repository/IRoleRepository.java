@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.teamManager.model.Role;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface IRoleRepository.
  */

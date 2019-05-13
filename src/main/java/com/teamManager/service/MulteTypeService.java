@@ -91,4 +91,11 @@ public class MulteTypeService {
 		multeTypeRepository.deleteById(id);
 		return true;
 	}
+
+	public boolean disable(Long id) throws Exception {
+		MultaTypeDTO multaTypeDTO = this.get(id);
+		multaTypeDTO.setEnabled(false);
+		multeTypeRepository.save(multaTypeAdapter.getAdapter(multaTypeDTO, MulteType.class));
+		return true;
+	}
 }
