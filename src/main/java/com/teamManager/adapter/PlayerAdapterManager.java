@@ -53,6 +53,7 @@ public class PlayerAdapterManager implements AdapterService {
 		entity.setMulte(getMulteDTOs(dto));
 		entity.setName(dto.getName());
 		entity.setSurname(dto.getSurname());
+		entity.setEnabled(dto.getEnabled());
 		Optional<Team> team = teamRepository.findById(dto.getTeamId());
 		entity.setTeam(team.isPresent() ? team.get() : null);
 		return entity;
@@ -66,6 +67,7 @@ public class PlayerAdapterManager implements AdapterService {
 		dto.setName(entity.getName());
 		dto.setSurname(entity.getSurname());
 		dto.setTeamId(entity.getTeam().getId());
+		dto.setEnabled(entity.getEnabled());
 		return dto;
 	}
 

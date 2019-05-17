@@ -38,6 +38,8 @@ public class Player {
 	@JsonBackReference
 	private Team team;
 
+	private Boolean enabled = true;
+
 	/**
 	 * Gets the id.
 	 *
@@ -131,6 +133,25 @@ public class Player {
 	 */
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+
+	/**
+	 * Gets the enabled.
+	 *
+	 * @return the enabled
+	 */
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled
+	 *            the new enabled
+	 */
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

@@ -14,10 +14,12 @@ public class PlayerDTO {
 	private List<MultaDTO> multe = new ArrayList<>();
 
 	private Long teamId = null;
-	
+
 	private double multeNonPagate;
 
 	private double multePagate;
+
+	private Boolean enabled = true;
 
 	public Long getId() {
 		return id;
@@ -73,6 +75,14 @@ public class PlayerDTO {
 
 	public void setMultePagate(double multePagate) {
 		this.multePagate = multePagate;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public void setTotalMulte() {

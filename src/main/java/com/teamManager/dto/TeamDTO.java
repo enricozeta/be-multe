@@ -42,7 +42,13 @@ public class TeamDTO {
 	}
 
 	public List<PlayerDTO> getPlayers() {
-		return players;
+		List<PlayerDTO> result = new ArrayList<>();
+		this.players.forEach(player -> {
+			if (player.getEnabled()) {
+				result.add(player);
+			}
+		});
+		return result;
 	}
 
 	public void setPlayers(List<PlayerDTO> players) {

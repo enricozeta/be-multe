@@ -2,30 +2,30 @@ package com.teamManager.dto;
 
 public class CharDataDTO {
 
-	private Integer month;
-	private Integer year;
+	private String month;
+	private String year;
 	private Double value;
 
-	public CharDataDTO(Integer month, Integer year, Double value) {
+	public CharDataDTO(String month, String year, Double value) {
 		super();
 		this.month = month;
 		this.year = year;
 		this.value = value;
 	}
 
-	public Integer getMonth() {
+	public String getMonth() {
 		return month;
 	}
 
-	public void setMonth(Integer month) {
+	public void setMonth(String month) {
 		this.month = month;
 	}
 
-	public Integer getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(Integer year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 

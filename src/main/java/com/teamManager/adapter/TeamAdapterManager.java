@@ -131,9 +131,10 @@ public class TeamAdapterManager implements AdapterService {
 
 	private void setPaidNoPaid(TeamDTO team) {
 		for (PlayerDTO playerDTO : team.getPlayers()) {
-			team.setPaid(team.getPaid() + playerDTO.getMultePagate() + team.getFondoCassa());
+			team.setPaid(team.getPaid() + playerDTO.getMultePagate());
 			team.setNoPaid(team.getNoPaid() + playerDTO.getMulteNonPagate());
 		}
+		team.setPaid(team.getPaid() + team.getFondoCassa());
 	}
 
 }

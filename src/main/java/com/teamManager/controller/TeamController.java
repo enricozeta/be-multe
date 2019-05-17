@@ -75,7 +75,12 @@ public class TeamController {
 	 */
 	@RequestMapping(value = { "admin/team" }, method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody Boolean update(@RequestBody TeamDTO team) throws Exception {
-		teamRepository.save(teamService.checkTeam(team.getId()));
+		Team currentTeam = teamService.checkTeam(team.getId());
+		currentTeam.setName(team.getName());
+		currentTeam.setFondoCassa(team.getFondoCassa());
+		currentTeam.setPaid(team.getPaid());
+		currentTeam.setNoPaid(team.getNoPaid());
+		teamRepository.save(currentTeam);
 		return true;
 	}
 
@@ -167,6 +172,11 @@ public class TeamController {
 	@RequestMapping(value = { "team/chartData" }, method = RequestMethod.GET, produces = { "application/json" })
 	public @ResponseBody List<CharDataDTO> getChartData() throws Exception {
 		return teamService.getChartData();
+	}
+	
+	@RequestMapping(value = { "team/chartDataNoPay" }, method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody List<CharDataDTO> getChartDataNoPay() throws Exception {
+		return teamService.getChartDataNoPay();
 	}
 
 }

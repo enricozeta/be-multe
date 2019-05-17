@@ -2,10 +2,7 @@ package com.teamManager.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Tuple;
 
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.teamManager.adapter.TeamAdapterManager;
 import com.teamManager.dto.CharDataDTO;
+import com.teamManager.dto.ChartDataDTOExt;
 import com.teamManager.dto.PlayerDTO;
 import com.teamManager.dto.TeamDTO;
 import com.teamManager.model.Team;
@@ -146,20 +144,97 @@ public class TeamService {
 
 	public List<CharDataDTO> getChartData() throws Exception {
 		List<CharDataDTO> result = new ArrayList<>();
-		List<Tuple> chartData = teamRepository.getChartData(String.valueOf(this.getCurrentTeam().getId()));
+		Long team_id = this.getCurrentTeam().getId();
+		if (teamRepository.checkTypeOfCharData(String.valueOf(team_id)).size() <= 2) {
+			result.addAll(
+					getChartDataByDay(teamRepository.getChartDataByDay(String.valueOf(this.getCurrentTeam().getId()))));
+		} else {
+			result.addAll(getChartDataByMonth(
+					teamRepository.getChartDataByMonth(String.valueOf(this.getCurrentTeam().getId()))));
+		}
+		result.sort(Comparator.comparing(CharDataDTO::getSort));
+		return result;
+	}
+
+	public List<CharDataDTO> getChartDataNoPay() throws Exception {
+		List<CharDataDTO> result = new ArrayList<>();
+		Long team_id = this.getCurrentTeam().getId();
+		if (teamRepository.checkTypeOfCharDataNoPay(String.valueOf(team_id)).size() <= 2) {
+			result.addAll(getChartDataByDayNoPay(
+					teamRepository.getChartDataByDayNoPay(String.valueOf(this.getCurrentTeam().getId()))));
+		} else {
+			result.addAll(getChartDataByMonthNoPay(
+					teamRepository.getChartDataByMonthNoPay(String.valueOf(this.getCurrentTeam().getId()))));
+		}
+		result.sort(Comparator.comparing(CharDataDTO::getSort));
+		return result;
+	}
+
+	private List<CharDataDTO> getChartDataByMonth(List<Tuple> chartData) {
+		List<CharDataDTO> result = new ArrayList<>();
 		for (int i = 0; i < chartData.size(); i++) {
 			Tuple item = chartData.get(i);
 			if (i != 0) {
 				CharDataDTO prec = result.get(i - 1);
-				result.add(new CharDataDTO(item.get(0, Integer.class), item.get(1, Integer.class),
+				result.add(new CharDataDTO(item.get(0).toString(), item.get(1).toString(),
 						item.get(2, Double.class) + prec.getValue()));
 			} else {
-				result.add(new CharDataDTO(item.get(0, Integer.class), item.get(1, Integer.class),
+				result.add(new CharDataDTO(item.get(0).toString(), item.get(1).toString(),
 						item.get(2, Double.class)));
 			}
 
 		}
-		result.sort(Comparator.comparing(CharDataDTO::getSort));
+		return result;
+	}
+
+	private List<ChartDataDTOExt> getChartDataByDay(List<Tuple> chartData) {
+		List<ChartDataDTOExt> result = new ArrayList<>();
+		for (int i = 0; i < chartData.size(); i++) {
+			Tuple item = chartData.get(i);
+			if (i != 0) {
+				ChartDataDTOExt prec = result.get(i - 1);
+				result.add(new ChartDataDTOExt(item.get(0).toString(), item.get(1).toString(), item.get(2).toString(),
+						item.get(3, Double.class) + prec.getValue()));
+			} else {
+				result.add(new ChartDataDTOExt(item.get(0).toString(), item.get(1).toString(), item.get(2).toString(),
+						item.get(3, Double.class)));
+			}
+
+		}
+		return result;
+	}
+
+	private List<CharDataDTO> getChartDataByMonthNoPay(List<Tuple> chartData) {
+		List<CharDataDTO> result = new ArrayList<>();
+		for (int i = 0; i < chartData.size(); i++) {
+			Tuple item = chartData.get(i);
+			if (i != 0) {
+				CharDataDTO prec = result.get(i - 1);
+				result.add(new CharDataDTO(item.get(0).toString(), item.get(1).toString(),
+						item.get(2, Double.class) + prec.getValue()));
+			} else {
+				result.add(new CharDataDTO(item.get(0, String.class), item.get(1, String.class),
+						item.get(2, Double.class)));
+			}
+
+		}
+		return result;
+	}
+
+	private List<ChartDataDTOExt> getChartDataByDayNoPay(List<Tuple> chartData) {
+		List<ChartDataDTOExt> result = new ArrayList<>();
+		for (int i = 0; i < chartData.size(); i++) {
+			Tuple item = chartData.get(i);
+			if (i != 0) {
+				ChartDataDTOExt prec = (ChartDataDTOExt) result.get(i - 1);
+				result.add(new ChartDataDTOExt(item.get(0).toString(), item.get(1).toString(), item.get(2).toString(),
+						item.get(3, Double.class) + prec.getValue()));
+			} else {
+				result.add(new ChartDataDTOExt(item.get(0).toString(), item.get(1).toString(), item.get(2).toString(),
+						item.get(3, Double.class)));
+			}
+
+		}
 		return result;
 	}
 

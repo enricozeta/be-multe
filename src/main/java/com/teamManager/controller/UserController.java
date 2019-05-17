@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.teamManager.dto.TeamDTO;
 import com.teamManager.dto.UserDTO;
 import com.teamManager.model.User;
 import com.teamManager.repository.IUserRepository;
+import com.teamManager.service.TeamService;
 import com.teamManager.service.UserService;
 
 /**
@@ -23,7 +25,10 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private TeamService teamService;
+	
 	@Autowired
 	private IUserRepository userRepository;
 
@@ -78,7 +83,7 @@ public class UserController {
 			User getUser = userRepository.findByEmail(email);
 			if (user != null && user.getEmail().equals(email)) {
 				userService.updateUser(user);
-				return getUser;
+				return getUser;	
 			}
 			throw new Exception("User logged not found");
 		} else {

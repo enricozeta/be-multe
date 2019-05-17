@@ -18,11 +18,7 @@ public class SignUpForm {
 	@Size(min = 3, max = 50)
 	private String surname;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
-	private String username;
-
-	private TeamDTO team;
+	private String team;
 
 	@NotBlank
 	@Size(max = 60)
@@ -41,14 +37,6 @@ public class SignUpForm {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getEmail() {
@@ -83,11 +71,11 @@ public class SignUpForm {
 		this.surname = surname;
 	}
 
-	public TeamDTO getTeam() {
+	public String getTeam() {
 		return team;
 	}
 
-	public void setTeam(TeamDTO team) {
+	public void setTeam(String team) {
 		this.team = team;
 	}
 }

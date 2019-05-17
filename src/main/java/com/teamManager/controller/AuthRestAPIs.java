@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teamManager.dto.TeamDTO;
 import com.teamManager.model.Role;
 import com.teamManager.model.Team;
 import com.teamManager.model.User;
@@ -50,7 +51,7 @@ public class AuthRestAPIs {
 
 	@Autowired
 	private TeamService teamService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -92,13 +93,15 @@ public class AuthRestAPIs {
 		if (userRepository.findByEmail(signUpRequest.getEmail()) != null) {
 			return new ResponseEntity<>("Fail -> Email is already in use!", HttpStatus.BAD_REQUEST);
 		}
-		Team teamSaved = teamService.save(signUpRequest.getTeam());
+		TeamDTO teamDTO = new TeamDTO();
+		teamDTO.setName(signUpRequest.getTeam());
+		Team teamSaved = teamService.save(teamDTO);
 
 		try {
 			User user = new User();
 			user.setEmail(signUpRequest.getEmail());
 			user.setName(signUpRequest.getName());
-			user.setLastName(signUpRequest.getUsername());
+			user.setLastName(signUpRequest.getSurname());
 			user.setTeam(teamSaved);
 			user.setPassword(signUpRequest.getPassword());
 			Role userRole = roleRepository.findByRole("ADMIN");
